@@ -2,6 +2,12 @@
 
 ## 開発準備
 
+まず始めに以下のコマンドを実行してください。
+
+```text
+npm install
+```
+
 ### Issueを探す/立てる
 
 1. [Issues](https://github.com/stzn/swift-migration-guide-jp/issues)の中から解決したい Issue を選択(あるいは作成)してください

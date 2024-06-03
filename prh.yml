@@ -1,0 +1,1469 @@
+rules:
+  - expected: あらかじめ
+    pattern:
+      - 予め
+    prh: >-
+      平仮名にしたほうが読みやすい漢字は平仮名にする
+      https://smarthr.design/products/contents/writing-style/
+    specs:
+      - from: 予め
+        to: あらかじめ
+  - expected: いたします
+    pattern:
+      - 致します
+    prh: >-
+      平仮名にしたほうが読みやすい漢字は平仮名にする
+      https://smarthr.design/products/contents/writing-style/
+    specs:
+      - from: 致します
+        to: いたします
+  - expected: いただ$1
+    pattern:
+      - /頂([いかきくけこ])/
+    prh: >-
+      平仮名にしたほうが読みやすい漢字は平仮名にする
+      https://smarthr.design/products/contents/writing-style/
+    specs:
+      - from: 頂い
+        to: いただい
+      - from: 頂か
+        to: いただか
+      - from: 頂く
+        to: いただく
+      - from: 頂き
+        to: いただき
+      - from: 頂け
+        to: いただけ
+      - from: 頂こ
+        to: いただこ
+  - expected: および
+    pattern:
+      - 及び
+    prh: >-
+      平仮名にしたほうが読みやすい漢字は平仮名にする
+      https://smarthr.design/products/contents/writing-style/
+    specs:
+      - from: 及び
+        to: および
+  - expected: ください
+    pattern:
+      - 下さい
+    prh: >-
+      平仮名にしたほうが読みやすい漢字は平仮名にする
+      https://smarthr.design/products/contents/writing-style/
+    specs:
+      - from: 下さい
+        to: ください
+  - expected: ご存じ
+    pattern:
+      - ご存知
+    prh: >-
+      平仮名にしたほうが読みやすい漢字は平仮名にする
+      https://smarthr.design/products/contents/writing-style/
+    specs:
+      - from: ご存知
+        to: ご存じ
+  - expected: さきほど
+    pattern:
+      - 先程
+    prh: >-
+      平仮名にしたほうが読みやすい漢字は平仮名にする
+      https://smarthr.design/products/contents/writing-style/
+    specs:
+      - from: 先程
+        to: さきほど
+  - expected: さまざま
+    pattern:
+      - 様々
+    prh: >-
+      平仮名にしたほうが読みやすい漢字は平仮名にする
+      https://smarthr.design/products/contents/writing-style/
+    specs:
+      - from: 様々
+        to: さまざま
+  - expected: すでに
+    pattern:
+      - 既に
+    prh: >-
+      平仮名にしたほうが読みやすい漢字は平仮名にする
+      https://smarthr.design/products/contents/writing-style/
+    specs:
+      - from: 既に
+        to: すでに
+  - expected: すなわち
+    pattern:
+      - 即ち
+    prh: >-
+      平仮名にしたほうが読みやすい漢字は平仮名にする
+      https://smarthr.design/products/contents/writing-style/
+    specs:
+      - from: 即ち
+        to: すなわち
+  - expected: すべて
+    pattern:
+      - 全て
+    prh: >-
+      平仮名にしたほうが読みやすい漢字は平仮名にする
+      https://smarthr.design/products/contents/writing-style/
+    specs:
+      - from: 全て
+        to: すべて
+  - expected: そば$1
+    pattern:
+      - >-
+        /(?<![々〇〻\u3400-\u9FFF\uF900-\uFAFF]|[\uD840-\uD87F][\uDC00-\uDFFF])側([にへが])/
+    prh: >-
+      平仮名にしたほうが読みやすい漢字は平仮名にする
+      https://smarthr.design/products/contents/writing-style/
+    specs:
+      - from: ボタンの側にある
+        to: ボタンのそばにある
+  - expected: たくさん
+    pattern:
+      - 沢山
+    prh: >-
+      平仮名にしたほうが読みやすい漢字は平仮名にする
+      https://smarthr.design/products/contents/writing-style/
+    specs:
+      - from: 沢山
+        to: たくさん
+  - expected: ただ
+    pattern:
+      - 只
+    prh: >-
+      平仮名にしたほうが読みやすい漢字は平仮名にする
+      https://smarthr.design/products/contents/writing-style/
+    specs:
+      - from: 只
+        to: ただ
+  - expected: ただし
+    pattern:
+      - 但し
+    prh: >-
+      平仮名にしたほうが読みやすい漢字は平仮名にする
+      https://smarthr.design/products/contents/writing-style/
+    specs:
+      - from: 但し
+        to: ただし
+  - expected: ため$1
+    pattern:
+      - /為([にで])/
+    prh: >-
+      平仮名にしたほうが読みやすい漢字は平仮名にする
+      https://smarthr.design/products/contents/writing-style/
+    specs:
+      - from: 為です
+        to: ためです
+  - expected: など$1
+    pattern:
+      - /(?<!同)等([をのが、])/
+    prh: >-
+      平仮名にしたほうが読みやすい漢字は平仮名にする
+      https://smarthr.design/products/contents/writing-style/
+    specs:
+      - from: 住所等を入力
+        to: 住所などを入力
+  - expected: ならびに
+    pattern:
+      - /(?<![横縦])並びに/
+    prh: >-
+      平仮名にしたほうが読みやすい漢字は平仮名にする
+      https://smarthr.design/products/contents/writing-style/
+    specs:
+      - from: 並びに
+        to: ならびに
+  - expected: まず
+    pattern:
+      - 先ず
+    prh: >-
+      平仮名にしたほうが読みやすい漢字は平仮名にする
+      https://smarthr.design/products/contents/writing-style/
+    specs:
+      - from: 先ず
+        to: まず
+  - expected: まで
+    pattern:
+      - 迄
+    prh: >-
+      平仮名にしたほうが読みやすい漢字は平仮名にする
+      https://smarthr.design/products/contents/writing-style/
+    specs:
+      - from: 迄
+        to: まで
+  - expected: もって
+    pattern:
+      - 以て
+    prh: >-
+      平仮名にしたほうが読みやすい漢字は平仮名にする
+      https://smarthr.design/products/contents/writing-style/
+    specs:
+      - from: 以て
+        to: もって
+  - expected: もっとも
+    pattern:
+      - 尤も
+    prh: >-
+      平仮名にしたほうが読みやすい漢字は平仮名にする
+      https://smarthr.design/products/contents/writing-style/
+    specs:
+      - from: 尤も
+        to: もっとも
+  - expected: でき$1
+    pattern:
+      - /出来([かがのをは過す損ずなまるたれてそ])/
+    prh: >-
+      平仮名にしたほうが読みやすい漢字は平仮名にする
+      https://smarthr.design/products/contents/writing-style/
+    specs:
+      - from: 出来る
+        to: できる
+  - expected: のなかで
+    pattern:
+      - の中で
+    prh: >-
+      平仮名にしたほうが読みやすい漢字は平仮名にする
+      https://smarthr.design/products/contents/writing-style/
+    specs:
+      - from: 文章の中で
+        to: 文章のなかで
+  - expected: CSVファイル
+    pattern:
+      - csvファイル
+    prh: >-
+      「◯◯ファイル」の◯◯の部分は大文字で表記し、拡張子は省略する
+      https://smarthr.design/products/contents/idiomatic-usage/usage/
+    specs:
+      - from: csvファイル
+        to: CSVファイル
+  - expected: PDFファイル
+    pattern:
+      - pdfファイル
+    prh: >-
+      「◯◯ファイル」の◯◯の部分は大文字で表記し、拡張子は省略する
+      https://smarthr.design/products/contents/idiomatic-usage/usage/
+    specs:
+      - from: pdfファイル
+        to: PDFファイル
+  - expected: ZIPファイル
+    pattern:
+      - zipファイル
+    prh: >-
+      「◯◯ファイル」の◯◯の部分は大文字で表記し、拡張子は省略する
+      https://smarthr.design/products/contents/idiomatic-usage/usage/
+    specs:
+      - from: zipファイル
+        to: ZIPファイル
+  - expected: アイコン
+    pattern:
+      - >-
+        /(?<!ウォーター|ベル|チェック|サービス|ランド|ロゴ|合意済み|合意済|破棄済み|破棄済|合意|合意前|「合意済み」|「破棄済み」|見本|アット|ブック)マーク(?![ァ-ヶ])(?=.*)/
+    prh: >-
+      「マーク」ではなく「アイコン」と表記する
+      https://smarthr.design/products/contents/idiomatic-usage/usage/
+    specs:
+      - from: マーク
+        to: アイコン
+  - expected: アクセシビリティ
+    pattern:
+      - アクセシビリティー
+    prh: >-
+      ‐er、‐or、‐arで終わる単語は「長音あり」、-yで終わる単語は「長音なし」とする（例外あり）
+      https://smarthr.design/products/contents/idiomatic-usage/usage/
+    specs:
+      - from: アクセシビリティー
+        to: アクセシビリティ
+  - expected: あとで
+    pattern:
+      - /(?<![始了直])後で/
+    prh: >-
+      平仮名にしたほうが読みやすい漢字は平仮名にする
+      https://smarthr.design/products/contents/writing-style/
+    specs:
+      - from: 後でやります。
+        to: あとでやります。
+      - from: 評価開始後でも編集できます。
+        to: 評価開始後でも編集できます。
+  - expected: したうえで
+    pattern:
+      - した上で
+    prh: >-
+      平仮名にしたほうが読みやすい漢字は平仮名にする
+      https://smarthr.design/products/contents/writing-style/
+    specs:
+      - from: した上で
+        to: したうえで
+  - expected: $1さま
+    pattern:
+      - /(従業員|お客|ユーザー|皆)様/
+    prh: >-
+      平仮名にしたほうが読みやすい漢字は平仮名にする
+      https://smarthr.design/products/contents/writing-style/
+    specs:
+      - from: 従業員様
+        to: 従業員さま
+      - from: お客様
+        to: お客さま
+      - from: ユーザー様
+        to: ユーザーさま
+      - from: 皆様
+        to: 皆さま
+  - expected: あ$1
+    pattern:
+      - /有(っ|り|る|れ|ろ)/
+    prh: |-
+      平仮名にしたほうが読みやすい漢字は平仮名にする
+      https://smarthr.design/products/contents/writing-style/
+    specs:
+      - from: 有った
+        to: あった
+      - from: 有り
+        to: あり
+      - from: 有る
+        to: ある
+      - from: 有れば
+        to: あれば
+      - from: 有ろう
+        to: あろう
+  - expected: な$1
+    pattern:
+      - /無(い|く|し|か|け)/
+    prh: |-
+      平仮名にしたほうが読みやすい漢字は平仮名にする
+      https://smarthr.design/products/contents/writing-style/
+    specs:
+      - from: 無い
+        to: ない
+      - from: 無く
+        to: なく
+      - from: 無し
+        to: なし
+      - from: 無かった
+        to: なかった
+      - from: 無ければ
+        to: なければ
+  - expected: あわせて
+    pattern:
+      - /(?<![を|と|に|へ|は|も|組み|問い|掛け])(合わせて|併せて)/
+    prh: >-
+      「あわせて」は平仮名で表記する
+      https://smarthr.design/products/contents/idiomatic-usage/usage/#recUxtcs2EldiKQ1U-0
+    specs:
+      - from: 合わせて
+        to: あわせて
+      - from: 併せて
+        to: あわせて
+      - from: AとBを併せて入力
+        to: AとBを併せて入力
+      - from: 問い合わせて
+        to: 問い合わせて
+  - expected: 移動
+    pattern:
+      - 遷移
+    prh: >-
+      「移動」と表現し、「遷移」の使用は控える
+      https://smarthr.design/products/contents/idiomatic-usage/usage/
+    specs:
+      - from: 遷移
+        to: 移動
+  - expected: 振り込み
+    pattern:
+      - /(?<![給与|給付金])振込(?!口座)/
+    prh: >-
+      送りがなを付けて表記する
+      https://smarthr.design/products/contents/idiomatic-usage/usage/
+    specs:
+      - from: 振込
+        to: 振り込み
+      - from: 給与振込口座
+        to: 給与振込口座
+      - from: 給付金振込
+        to: 給付金振込
+  - expected: 取り消し
+    pattern:
+      - 取消
+    prh: >-
+      送りがなを付けて表記する
+      https://smarthr.design/products/contents/idiomatic-usage/usage/
+    specs:
+      - from: 取消
+        to: 取り消し
+  - expected: 差し戻し
+    pattern:
+      - 差戻し
+    prh: >-
+      送りがなを付けて表記する
+      https://smarthr.design/products/contents/idiomatic-usage/usage/
+    specs:
+      - from: 差戻し
+        to: 差し戻し
+  - expected: 行な$1
+    pattern:
+      - /おこな|行([いうえおわっ])/
+    prh: >-
+      「行なう」と表現し、「行う」の使用は控える
+      https://smarthr.design/products/contents/idiomatic-usage/usage/
+    specs:
+      - from: 行い
+        to: 行ない
+      - from: 行う
+        to: 行なう
+      - from: 行え
+        to: 行なえ
+      - from: 行おう
+        to: 行なおう
+      - from: 行わない
+        to: 行なわない
+      - from: 行って
+        to: 行なって
+      - from: おこない
+        to: 行ない
+      - from: おこなう
+        to: 行なう
+      - from: おこなえ
+        to: 行なえ
+      - from: おこなおう
+        to: 行なおう
+      - from: おこなわない
+        to: 行なわない
+      - from: おこなって
+        to: 行なって
+  - expected: 何卒
+    pattern:
+      - 何とぞ
+    prh: >-
+      平仮名にしたほうが読みやすい漢字は平仮名にする
+      https://smarthr.design/products/contents/writing-style/
+    specs:
+      - from: 何とぞ
+        to: 何卒
+  - expected: 並べ替え
+    pattern:
+      - 並び替え
+    specs:
+      - from: 並び替え
+        to: 並べ替え
+  - expected: をもとに
+    pattern:
+      - を基に
+    prh: >-
+      拠り所や根拠を示す「もと」は平仮名で表記する
+      https://smarthr.design/products/contents/idiomatic-usage/usage/#recwriblj4bLsRwiR-0
+    specs:
+      - from: 〜を基に入力する
+        to: 〜をもとに入力する
+  - expected: 元$1戻
+    pattern:
+      - /もと([にへ])戻/
+    prh: >-
+      前の工程に戻る場合の「元」は漢字で表記する
+      https://smarthr.design/products/contents/idiomatic-usage/usage/
+    specs:
+      - from: もとに戻す
+        to: 元に戻す
+  - expected: $1！
+    pattern:
+      - >-
+        /([\u3400-\u4DBF\u4E00-\u9FFF\uF900-\uFAFF]|[\uD840-\uD87F][\uDC00-\uDFFF]|[ぁ-んァ-ヶ])![^!\?]/
+    prh: >-
+      「！」と「？」は単独で使う場合は全角、ペアで使う場合は半角で表記する
+      https://smarthr.design/products/contents/idiomatic-usage/usage/
+  - expected: $1？
+    pattern:
+      - >-
+        /([\u3400-\u4DBF\u4E00-\u9FFF\uF900-\uFAFF]|[\uD840-\uD87F][\uDC00-\uDFFF]|[ぁ-んァ-ヶ])\?[^!\?]/
+    prh: >-
+      「！」と「？」は単独で使う場合は全角、ペアで使う場合は半角で表記する
+      https://smarthr.design/products/contents/idiomatic-usage/usage/
+  - expected: '!!'
+    pattern:
+      - ！！
+    prh: >-
+      「！」と「？」は単独で使う場合は全角、ペアで使う場合は半角で表記する
+      https://smarthr.design/products/contents/idiomatic-usage/usage/
+    specs:
+      - from: ！！
+        to: '!!'
+  - expected: '!?'
+    pattern:
+      - ！？
+    prh: >-
+      「！」と「？」は単独で使う場合は全角、ペアで使う場合は半角で表記する
+      https://smarthr.design/products/contents/idiomatic-usage/usage/
+    specs:
+      - from: ！？
+        to: '!?'
+  - expected: '??'
+    pattern:
+      - ？？
+    prh: >-
+      「！」と「？」は単独で使う場合は全角、ペアで使う場合は半角で表記する
+      https://smarthr.design/products/contents/idiomatic-usage/usage/
+    specs:
+      - from: ？？
+        to: '??'
+  - expected: 改善
+    pattern:
+      - カイゼン
+    prh: >-
+      「改善」と漢字で表記し、「カイゼン」の使用は控える
+      https://smarthr.design/products/contents/idiomatic-usage/usage/
+    specs:
+      - from: カイゼンしました
+        to: 改善しました
+  - expected: GB
+    pattern:
+      - ギガバイト
+    prh: >-
+      ファイルサイズは基本的に英字2文字で表記する
+      https://smarthr.design/products/contents/idiomatic-usage/usage/#recmk5vIbS65cWjA6-0
+    specs:
+      - from: ギガバイト
+        to: GB
+  - expected: KB
+    pattern:
+      - キロバイト
+    prh: >-
+      ファイルサイズは基本的に英字2文字で表記する
+
+      https://smarthr.design/products/contents/idiomatic-usage/usage/#recmk5vIbS65cWjA6-0
+    specs:
+      - from: 1キロバイト
+        to: 1KB
+  - expected: クエリ
+    pattern:
+      - クエリー
+    prh: >-
+      ‐er、‐or、‐arで終わる単語は「長音あり」、-yで終わる単語は「長音なし」とする（例外あり）
+      https://smarthr.design/products/contents/idiomatic-usage/usage/
+    specs:
+      - from: クエリー
+        to: クエリ
+  - expected: ごと$1
+    pattern:
+      - /毎([にので])/
+    prh: >-
+      平仮名にしたほうが読みやすい漢字は平仮名にする
+      https://smarthr.design/products/contents/writing-style/
+    specs:
+      - from: 口座毎に
+        to: 口座ごとに
+      - from: 項目毎の
+        to: 項目ごとの
+      - from: フォーム毎で
+        to: フォームごとで
+  - expected: サーバー
+    pattern:
+      - /サーバ(?!ー)/
+    prh: >-
+      ‐er、‐or、‐arで終わる単語は「長音あり」、-yで終わる単語は「長音なし」とする（例外あり）
+      https://smarthr.design/products/contents/idiomatic-usage/usage/
+    specs:
+      - from: 受信サーバに拒否されました
+        to: 受信サーバーに拒否されました
+  - expected: さら$1
+    pattern:
+      - /(?<!変)更(に|なる)/
+    prh: >-
+      平仮名にしたほうが読みやすい漢字は平仮名にする
+      https://smarthr.design/products/contents/writing-style/
+    specs:
+      - from: 更に
+        to: さらに
+      - from: 更なる
+        to: さらなる
+  - expected: しばらく
+    pattern:
+      - 暫く
+    prh: >-
+      平仮名にしたほうが読みやすい漢字は平仮名にする
+      https://smarthr.design/products/contents/writing-style/
+    specs:
+      - from: 暫く
+        to: しばらく
+  - expected: スマートフォン
+    pattern:
+      - スマートホン
+      - スマフォ
+      - スマホ
+    prh: >-
+      「スマートフォン」と表現し、「スマホ」などの表現は控える
+      https://smarthr.design/products/contents/idiomatic-usage/usage/
+    specs:
+      - from: スマートホン
+        to: スマートフォン
+      - from: スマフォ
+        to: スマートフォン
+      - from: スマホ
+        to: スマートフォン
+  - expected: セキュリティ
+    pattern:
+      - セキュリティー
+    prh: >-
+      ‐er、‐or、‐arで終わる単語は「長音あり」、-yで終わる単語は「長音なし」とする（例外あり）
+      https://smarthr.design/products/contents/idiomatic-usage/usage/
+    specs:
+      - from: セキュリティー
+        to: セキュリティ
+  - expected: ぜひ
+    pattern:
+      - /是非(?!を|に|にも)/
+    prh: >-
+      平仮名にしたほうが読みやすい漢字は平仮名にする
+      https://smarthr.design/products/contents/writing-style/
+    specs:
+      - from: 是非
+        to: ぜひ
+  - expected: ソフトウェア
+    pattern:
+      - ソフトウエア
+    prh: >-
+      「ウィ/ウェ/ウォ」を使用する
+      https://smarthr.design/products/contents/idiomatic-usage/usage/
+    specs:
+      - from: ソフトウエア
+        to: ソフトウェア
+  - expected: タイポグラフィ
+    pattern:
+      - タイポグラフィー
+    prh: >-
+      ‐er、‐or、‐arで終わる単語は「長音あり」、-yで終わる単語は「長音なし」とする（例外あり）
+      https://smarthr.design/products/contents/idiomatic-usage/usage/
+    specs:
+      - from: タイポグラフィー
+        to: タイポグラフィ
+  - expected: つけ$1
+    pattern:
+      - /(?<!受け|貼り|紐)付け([なてるれよ])/
+    prh: >-
+      平仮名にしたほうが読みやすい漢字は平仮名にする
+      https://smarthr.design/products/contents/writing-style/
+    specs:
+      - from: 付けない
+        to: つけない
+      - from: 付けて
+        to: つけて
+      - from: 付ける
+        to: つける
+      - from: 付ければ
+        to: つければ
+      - from: 付けよう
+        to: つけよう
+  - expected: TB
+    pattern:
+      - テラバイト
+    prh: >-
+      ファイルサイズは基本的に英字2文字で表記する
+      https://smarthr.design/products/contents/idiomatic-usage/usage/#recmk5vIbS65cWjA6-0
+    specs:
+      - from: 1テラバイト
+        to: 1TB
+  - expected: 問い合わせ
+    pattern:
+      - 問合せ
+    prh: >-
+      送りがなを付けて表記する
+      https://smarthr.design/products/contents/idiomatic-usage/usage/
+    specs:
+      - from: 問合せ
+        to: 問い合わせ
+  - expected: ともに
+    pattern:
+      - /(?<!公)共に/
+    prh: >-
+      平仮名にしたほうが読みやすい漢字は平仮名にする
+      https://smarthr.design/products/contents/writing-style/#recWCPX1UhchVaFjO-0
+    specs:
+      - from: 共にする
+        to: ともにする
+      - from: 公共のために
+        to: 公共のために
+  - expected: ドラッグアンドドロップ
+    pattern:
+      - ドラッグ＆ドロップ
+      - ドラッグ・ドロップ
+    specs:
+      - from: ドラッグ＆ドロップ
+        to: ドラッグアンドドロップ
+      - from: ドラッグ・ドロップ
+        to: ドラッグアンドドロップ
+  - expected: ナンバー
+    pattern:
+      - /ナンバ(?!ー)/
+    prh: >-
+      ‐er、‐or、‐arで終わる単語は「長音あり」、-yで終わる単語は「長音なし」とする（例外あり）
+      https://smarthr.design/products/contents/idiomatic-usage/usage/
+    specs:
+      - from: ナンバ
+        to: ナンバー
+  - expected: 入力必須
+    pattern:
+      - 必須入力
+    prh: >-
+      「入力必須」と表現し、「必須入力」の使用は控える
+      https://smarthr.design/products/contents/idiomatic-usage/usage/#recUVMSOhVDbQjMMN-0
+    specs:
+      - from: Aは必須入力です
+        to: Aは入力必須です
+      - from: 必須入力項目
+        to: 入力必須項目
+  - expected: はじめて
+    pattern:
+      - 初めて
+      - 始めて
+    prh: >-
+      平仮名にしたほうが読みやすい漢字は平仮名にする
+      https://smarthr.design/products/contents/writing-style/
+    specs:
+      - from: 初めて
+        to: はじめて
+      - from: 始めて
+        to: はじめて
+  - expected: 1つ
+    pattern:
+      - 一つ
+      - ひとつ
+    prh: >-
+      数字は半角の算用数字で表記する
+      https://smarthr.design/products/contents/idiomatic-usage/usage/
+    specs:
+      - from: 一つ
+        to: 1つ
+      - from: ひとつ
+        to: 1つ
+  - expected: 1人
+    pattern:
+      - /(?<!一人)(一人|ひとり)(?!ひとり|称|親)/
+    prh: >-
+      数字は半角の算用数字で表記する
+      https://smarthr.design/products/contents/idiomatic-usage/usage/
+    specs:
+      - from: 一人を選択
+        to: 1人を選択
+      - from: ひとりを選択
+        to: 1人を選択
+  - expected: ひな形
+    pattern:
+      - 雛形
+    prh: >-
+      平仮名にしたほうが読みやすい漢字は平仮名にする
+      https://smarthr.design/products/contents/writing-style/
+    specs:
+      - from: 雛形
+        to: ひな形
+  - expected: 紐づ$1
+    pattern:
+      - /紐付([いかきけく])/
+    prh: >-
+      平仮名にしたほうが読みやすい漢字は平仮名にする
+      https://smarthr.design/products/contents/writing-style/
+    specs:
+      - from: 紐付いて
+        to: 紐づいて
+      - from: 紐付かない
+        to: 紐づかない
+      - from: 紐付きをhoge
+        to: 紐づきをhoge
+      - from: 紐付けて
+        to: 紐づけて
+      - from: 紐付くhoge
+        to: 紐づくhoge
+  - expected: フィルター
+    pattern:
+      - /フィルタ(?!(ー|リング))/
+    prh: >-
+      ‐er、‐or、‐arで終わる単語は「長音あり」、-yで終わる単語は「長音なし」とする（例外あり）
+      https://smarthr.design/products/contents/idiomatic-usage/usage/
+    specs:
+      - from: フィルタ
+        to: フィルター
+      - from: フィルタリング
+        to: フィルタリング
+  - expected: フォルダ
+    pattern:
+      - フォルダー
+    prh: >-
+      ‐er、‐or、‐arで終わる単語は「長音あり」、-yで終わる単語は「長音なし」とする（例外あり）
+      https://smarthr.design/products/contents/idiomatic-usage/usage/
+    specs:
+      - from: フォルダー
+        to: フォルダ
+  - expected: 2つ
+    pattern:
+      - 二つ
+      - ふたつ
+    prh: >-
+      数字は半角の算用数字で表記する
+      https://smarthr.design/products/contents/idiomatic-usage/usage/
+    specs:
+      - from: 二つ
+        to: 2つ
+      - from: ふたつ
+        to: 2つ
+  - expected: フッター
+    pattern:
+      - /フッタ(?!ー)/
+    prh: >-
+      ‐er、‐or、‐arで終わる単語は「長音あり」、-yで終わる単語は「長音なし」とする（例外あり）
+      https://smarthr.design/products/contents/idiomatic-usage/usage/
+    specs:
+      - from: フッタ
+        to: フッター
+  - expected: プライバシー
+    pattern:
+      - /プライバシィ?(?!ー)/
+    prh: >-
+      ‐er、‐or、‐arで終わる単語は「長音あり」、-yで終わる単語は「長音なし」とする（例外あり）
+      https://smarthr.design/products/contents/idiomatic-usage/usage/
+    specs:
+      - from: プライバシ
+        to: プライバシー
+      - from: プライバシィ
+        to: プライバシー
+  - expected: ブラウザ
+    pattern:
+      - /(?<!ウェブ|Web|web|WEB)ブラウザー/
+    prh: >-
+      ‐er、‐or、‐arで終わる単語は「長音あり」、-yで終わる単語は「長音なし」とする（例外あり）
+      https://smarthr.design/products/contents/idiomatic-usage/usage/
+    specs:
+      - from: ブラウザー
+        to: ブラウザ
+  - expected: ブラウザ
+    pattern:
+      - /(ウェブ|Web|web|WEB)ブラウザ/
+    prh: >-
+      「ウェブ」はカタカナで表記する
+      https://smarthr.design/products/contents/idiomatic-usage/usage/
+    specs:
+      - from: ウェブブラウザ
+        to: ブラウザ
+      - from: Webブラウザ
+        to: ブラウザ
+      - from: webブラウザ
+        to: ブラウザ
+  - expected: プリンター
+    pattern:
+      - /プリンタ(?!ー)/
+    prh: >-
+      ‐er、‐or、‐arで終わる単語は「長音あり」、-yで終わる単語は「長音なし」とする（例外あり）https://smarthr.design/products/contents/idiomatic-usage/usage/
+    specs:
+      - from: プリンタ
+        to: プリンター
+  - expected: ヘッダー
+    pattern:
+      - /ヘッダ(?!ー)/
+    prh: >-
+      ‐er、‐or、‐arで終わる単語は「長音あり」、-yで終わる単語は「長音なし」とする（例外あり）
+      https://smarthr.design/products/contents/idiomatic-usage/usage/
+    specs:
+      - from: ヘッダ
+        to: ヘッダー
+  - expected: ポリシー
+    pattern:
+      - /ポリシィ?(?!ー)/
+    prh: >-
+      ‐er、‐or、‐arで終わる単語は「長音あり」、-yで終わる単語は「長音なし」とする（例外あり）
+      https://smarthr.design/products/contents/idiomatic-usage/usage/
+    specs:
+      - from: ポリシィ
+        to: ポリシー
+      - from: ポリシ
+        to: ポリシー
+  - expected: マスターデータ
+    pattern:
+      - /(?<!部署|役職|雇用形態|等級|］|スキル|資格|研修|カスタム|システム標準|SmartHR ?|ドメイン)マスタ(?!ー)(データ)?/
+    prh: >-
+      マスターデータの総称は「マスターデータ」、総称以外は「◯◯マスター」と表記するhttps://smarthr.design/products/contents/idiomatic-usage/usage/
+    specs:
+      - from: マスタ
+        to: マスターデータ
+      - from: マスタデータ
+        to: マスターデータ
+      - from: 部署マスター
+        to: 部署マスター
+      - from: 役職マスター
+        to: 役職マスター
+      - from: 雇用形態マスター
+        to: 雇用形態マスター
+      - from: 等級マスター
+        to: 等級マスター
+      - from: SmartHRマスター
+        to: SmartHRマスター
+  - expected: マネージャー
+    pattern:
+      - /マネージャ(?!ー)/
+    prh: >-
+      ‐er、‐or、‐arで終わる単語は「長音あり」、-yで終わる単語は「長音なし」とする（例外あり）
+      https://smarthr.design/products/contents/idiomatic-usage/usage/
+    specs:
+      - from: マネージャ
+        to: マネージャー
+  - expected: 見積もり
+    pattern:
+      - 見積り
+    prh: >-
+      送りがなを付けて表記する
+      https://smarthr.design/products/contents/idiomatic-usage/usage/
+    specs:
+      - from: 見積り
+        to: 見積もり
+  - expected: MB
+    pattern:
+      - メガバイト
+    prh: >-
+      ファイルサイズは基本的に英字2文字で表記する
+      https://smarthr.design/products/contents/idiomatic-usage/usage/#recmk5vIbS65cWjA6-0
+    specs:
+      - from: 1メガバイト
+        to: 1MB
+  - expected: メンバー
+    pattern:
+      - /メンバ(?!ー)/
+    prh: >-
+      ‐er、‐or、‐arで終わる単語は「長音あり」、-yで終わる単語は「長音なし」とする（例外あり）
+      https://smarthr.design/products/contents/idiomatic-usage/usage/
+    specs:
+      - from: メンバ
+        to: メンバー
+  - expected: ユーザー
+    pattern:
+      - /ユーザ(?!(ー|ビリティ))/
+    prh: >-
+      ‐er、‐or、‐arで終わる単語は「長音あり」、-yで終わる単語は「長音なし」とする（例外あり）
+      https://smarthr.design/products/contents/idiomatic-usage/usage/
+    specs:
+      - from: ユーザ
+        to: ユーザー
+      - from: ユーザビリティ
+        to: ユーザビリティ
+  - expected: よろしく
+    pattern:
+      - 宜しく
+    prh: >-
+      平仮名にしたほうが読みやすい漢字は平仮名にする
+      https://smarthr.design/products/contents/writing-style/
+    specs:
+      - from: 宜しく
+        to: よろしく
+  - expected: レイヤー
+    pattern:
+      - /(?<!プ)レイヤ(?!ー)/
+    prh: >-
+      ‐er、‐or、‐arで終わる単語は「長音あり」、-yで終わる単語は「長音なし」とする（例外あり）
+      https://smarthr.design/products/contents/idiomatic-usage/usage/
+    specs:
+      - from: レイヤ
+        to: レイヤー
+      - from: Flashプレイヤー
+        to: Flashプレイヤー
+  - expected: わか$2
+    pattern:
+      - /((?<![自区])分か(?!れる|れて|れた)|判|解)([らりるれっ])/
+    prh: >-
+      平仮名にしたほうが読みやすい漢字は平仮名にする
+      https://smarthr.design/products/contents/writing-style/
+    specs:
+      - from: 分からない
+        to: わからない
+      - from: 分かりやすい
+        to: わかりやすい
+      - from: 分かる
+        to: わかる
+      - from: 分かれば
+        to: わかれば
+      - from: 分かった
+        to: わかった
+      - from: 解らない
+        to: わからない
+      - from: 解りやすい
+        to: わかりやすい
+      - from: 解る
+        to: わかる
+      - from: 解れば
+        to: わかれば
+      - from: 解った
+        to: わかった
+      - from: 判らない
+        to: わからない
+      - from: 判りやすい
+        to: わかりやすい
+      - from: 判る
+        to: わかる
+      - from: 判れば
+        to: わかれば
+      - from: 判った
+        to: わかった
+  - expected: ⓪
+    pattern:
+      - /[🄋⓿🄌]/
+    prh: 丸数字は⓪（U+24EA）、①（U+2460）〜㊿（U+32BF）を使います。
+  - expected: ①
+    pattern:
+      - /[➀❶➊⓵]/
+    prh: 丸数字は⓪（U+24EA）、①（U+2460）〜㊿（U+32BF）を使います。
+  - expected: ②
+    pattern:
+      - /[➁❷➋⓶]/
+    prh: 丸数字は⓪（U+24EA）、①（U+2460）〜㊿（U+32BF）を使います。
+  - expected: ③
+    pattern:
+      - /[➂❸➌⓷]/
+    prh: 丸数字は⓪（U+24EA）、①（U+2460）〜㊿（U+32BF）を使います。
+  - expected: ④
+    pattern:
+      - /[➃❹➍⓸]/
+    prh: 丸数字は⓪（U+24EA）、①（U+2460）〜㊿（U+32BF）を使います。
+  - expected: ⑤
+    pattern:
+      - /[➄❺➎⓹]/
+    prh: 丸数字は⓪（U+24EA）、①（U+2460）〜㊿（U+32BF）を使います。
+  - expected: ⑥
+    pattern:
+      - /[➅❻➏⓺]/
+    prh: 丸数字は⓪（U+24EA）、①（U+2460）〜㊿（U+32BF）を使います。
+  - expected: ⑦
+    pattern:
+      - /[➆❼➐⓻]/
+    prh: 丸数字は⓪（U+24EA）、①（U+2460）〜㊿（U+32BF）を使います。
+  - expected: ⑧
+    pattern:
+      - /[➇❽➑⓼]/
+    prh: 丸数字は⓪（U+24EA）、①（U+2460）〜㊿（U+32BF）を使います。
+  - expected: ⑨
+    pattern:
+      - /[➈❾➒⓽]/
+    prh: 丸数字は⓪（U+24EA）、①（U+2460）〜㊿（U+32BF）を使います。
+  - expected: ⑩
+    pattern:
+      - /[➉❿➓⓾]/
+    prh: 丸数字は⓪（U+24EA）、①（U+2460）〜㊿（U+32BF）を使います。
+  - expected: ⑪
+    pattern:
+      - /[⓫]/
+    prh: 丸数字は⓪（U+24EA）、①（U+2460）〜㊿（U+32BF）を使います。
+  - expected: ⑫
+    pattern:
+      - /[⓬]/
+    prh: 丸数字は⓪（U+24EA）、①（U+2460）〜㊿（U+32BF）を使います。
+  - expected: ⑬
+    pattern:
+      - /[⓭]/
+    prh: 丸数字は⓪（U+24EA）、①（U+2460）〜㊿（U+32BF）を使います。
+  - expected: ⑭
+    pattern:
+      - /[⓮]/
+    prh: 丸数字は⓪（U+24EA）、①（U+2460）〜㊿（U+32BF）を使います。
+  - expected: ⑮
+    pattern:
+      - /[⓯]/
+    prh: 丸数字は⓪（U+24EA）、①（U+2460）〜㊿（U+32BF）を使います。
+  - expected: ⑯
+    pattern:
+      - /[⓰]/
+    prh: 丸数字は⓪（U+24EA）、①（U+2460）〜㊿（U+32BF）を使います。
+  - expected: ⑰
+    pattern:
+      - /[⓱]/
+    prh: 丸数字は⓪（U+24EA）、①（U+2460）〜㊿（U+32BF）を使います。
+  - expected: ⑱
+    pattern:
+      - /[⓲]/
+    prh: 丸数字は⓪（U+24EA）、①（U+2460）〜㊿（U+32BF）を使います。
+  - expected: ⑲
+    pattern:
+      - /[⓳]/
+    prh: 丸数字は⓪（U+24EA）、①（U+2460）〜㊿（U+32BF）を使います。
+  - expected: ⑳
+    pattern:
+      - /[⓴]/
+    prh: 丸数字は⓪（U+24EA）、①（U+2460）〜㊿（U+32BF）を使います。
+  - expected: 企業アカウント
+    pattern:
+      - /テナント(?!ID)/
+    prh: >-
+      「企業アカウント」と表現し、「テナント」の使用は控える
+      https://smarthr.design/products/contents/idiomatic-usage/usage/
+    specs:
+      - from: テナント
+        to: 企業アカウント
+  - expected: サブドメイン
+    pattern:
+      - テナントID
+    prh: 「テナントID」は社内用語のため、「サブドメイン」に置き換えます。内部的に使用する「tenant_id」はそのまま表記してください。
+    specs:
+      - from: テナントID
+        to: サブドメイン
+  - expected: 在籍状況
+    pattern:
+      - 在職状況
+    prh: >-
+      従業員の休職や退職を表すステータスの総称は「在籍状況」と表現し、勤務中の状態は「在職中」と表現する
+      https://smarthr.design/products/contents/idiomatic-usage/usage/
+    specs:
+      - from: 在職状況
+        to: 在籍状況
+  - expected: 在職中
+    pattern:
+      - 在籍中
+    prh: >-
+      従業員の休職や退職を表すステータスの総称は「在籍状況」と表現し、勤務中の状態は「在職中」と表現する
+      https://smarthr.design/products/contents/idiomatic-usage/usage/
+    specs:
+      - from: 在籍中
+        to: 在職中
+  - expected: 再読み込み
+    pattern:
+      - /再(読込み|読込)|リロード/
+    prh: >-
+      「再読み込み」と表現し、「更新」「リロード」の使用は控える
+      https://smarthr.design/products/contents/idiomatic-usage/usage/
+    specs:
+      - from: 再読込み
+        to: 再読み込み
+      - from: 再読込
+        to: 再読み込み
+      - from: リロード
+        to: 再読み込み
+      - from: 再読み込み
+        to: 再読み込み
+  - expected: 動作環境
+    pattern:
+      - 推奨環境
+    prh: >-
+      「動作環境」と表現し、「推奨環境」の使用は控える
+
+      https://smarthr.design/products/contents/idiomatic-usage/usage/#recrOBmlqFtzIUKDh-0
+    specs:
+      - from: 推奨環境
+        to: 動作環境
+  - expected: 主な
+    pattern:
+      - おもな
+    specs:
+      - from: おもな作業はhogeです
+        to: 主な作業はhogeです
+  - expected: 主に
+    pattern:
+      - おもに
+    specs:
+      - from: おもに労務担当者が使用します
+        to: 主に労務担当者が使用します
+  - expected: コピーアンドペースト
+    pattern:
+      - /コピー&ペースト|コピー＆ペースト|コピー・ペースト|コピペ/
+    specs:
+      - from: コピー&ペースト
+        to: コピーアンドペースト
+      - from: コピー＆ペースト
+        to: コピーアンドペースト
+      - from: コピー・ペースト
+        to: コピーアンドペースト
+      - from: コピペ
+        to: コピーアンドペースト
+  - expected: システム標準マスター
+    pattern:
+      - /(システム標準マスターデータ|システム標準マスタ(?!ー))/
+    prh: >-
+      マスターデータの総称は「マスターデータ」、総称以外は「◯◯マスター」と表記する
+      https://smarthr.design/products/contents/idiomatic-usage/usage/
+    specs:
+      - from: システム標準マスタ
+        to: システム標準マスター
+      - from: システム標準マスターデータ
+        to: システム標準マスター
+      - from: システム標準マスター
+        to: システム標準マスター
+  - expected: カスタムマスター
+    pattern:
+      - /(カスタムマスターデータ|カスタムマスタ(?!ー))/
+    prh: >-
+      マスターデータの総称は「マスターデータ」、総称以外は「◯◯マスター」と表記する
+      https://smarthr.design/products/contents/idiomatic-usage/usage/
+    specs:
+      - from: カスタムマスタ
+        to: カスタムマスター
+      - from: カスタムマスターデータ
+        to: カスタムマスター
+      - from: カスタムマスター
+        to: カスタムマスター
+  - expected: SmartHR基本機能
+    pattern:
+      - /SmartHR本体アプリ|本体アプリ|SmartHR本体/
+    prh: >-
+      アプリケーションの呼び方には「SmartHR基本機能」と「オプション機能」を使用する
+      https://smarthr.design/products/contents/idiomatic-usage/usage/
+    specs:
+      - from: SmartHR本体アプリの権限ごとに設定します
+        to: SmartHR基本機能の権限ごとに設定します
+      - from: SmartHR本体の権限ごとに設定します
+        to: SmartHR基本機能の権限ごとに設定します
+      - from: 本体アプリの権限ごとに設定します
+        to: SmartHR基本機能の権限ごとに設定します
+  - expected: オプション機能
+    pattern:
+      - プラスアプリ
+    prh: >-
+      アプリケーションの呼び方には「SmartHR基本機能」と「オプション機能」を使用する
+      https://smarthr.design/products/contents/idiomatic-usage/usage/
+    specs:
+      - from: 通勤経路検索機能はプラスアプリです
+        to: 通勤経路検索機能はオプション機能です
+  - expected: ウェイト
+    pattern:
+      - ウエイト
+    prh: >-
+      「ウィ/ウェ/ウォ」を使用する
+      https://smarthr.design/products/contents/idiomatic-usage/usage/#recvhB6VJstpBQKeV-0
+    specs:
+      - from: 大きなウエイトを占める
+        to: 大きなウェイトを占める
+  - expected: ドロップダウンリスト
+    pattern:
+      - /プルダウン(メニュー|リスト)|プルダウン|ドロップダウンメニュー|ドロップダウン(?!リスト)/
+    prh: >-
+      「ドロップダウンリスト」と表現し、「プルダウンメニュー」などの使用は控える
+      https://smarthr.design/products/contents/idiomatic-usage/usage/
+    specs:
+      - from: プルダウンから選ぶ
+        to: ドロップダウンリストから選ぶ
+      - from: プルダウンリストから選ぶ
+        to: ドロップダウンリストから選ぶ
+      - from: ドロップダウンメニューから選ぶ
+        to: ドロップダウンリストから選ぶ
+      - from: プルダウンメニューから選ぶ
+        to: ドロップダウンリストから選ぶ
+      - from: ドロップダウンから選ぶ
+        to: ドロップダウンリストから選ぶ
+  - expected: 伴$1
+    pattern:
+      - /ともな([いうえおわっ])/
+    specs:
+      - from: ともない
+        to: 伴い
+      - from: ともなう
+        to: 伴う
+      - from: ともなえ
+        to: 伴え
+      - from: ともなおう
+        to: 伴おう
+      - from: ともなわない
+        to: 伴わない
+      - from: ともなって
+        to: 伴って
+  - expected: パソコン
+    pattern:
+      - /(?<![a-zA-Z])PC(?![a-zA-Z])/
+    prh: >-
+      「パソコン」と表記し、「PC」の使用は控える
+      https://smarthr.design/products/contents/idiomatic-usage/usage/#recw4wmIL3QqcKmoc-0
+    specs:
+      - from: PCを使用します
+        to: パソコンを使用します
+      - from: HOGEPCFOO
+        to: HOGEPCFOO
+  - expected: 画面
+    pattern:
+      - /モーダルウィンドウ|モーダルダイアログ|ウィンドウ|ダイアログ|モーダル/
+    prh: >-
+      アプリケーションの操作画面は「画面」で表記する
+      https://smarthr.design/products/contents/idiomatic-usage/usage/#recuyZUYZxqRrVbeB-0
+    specs:
+      - from: 別ウィンドウで開く
+        to: 別画面で開く
+      - from: 削除ダイアログ
+        to: 削除画面
+      - from: モーダルを閉じる
+        to: 画面を閉じる
+  - expected: か所
+    pattern:
+      - /(?<![^\x01-\x7E])(ヶ|ケ|箇|個|ヵ|カ)所/
+    prh: >-
+      「か所」「か月」と表記する
+      https://smarthr.design/products/contents/idiomatic-usage/usage/#rec1wuNfx5bfUqAxd-0
+    specs:
+      - from: 3ヶ所
+        to: 3か所
+      - from: 3ケ所
+        to: 3か所
+      - from: 3箇所
+        to: 3か所
+      - from: 3個所
+        to: 3か所
+      - from: 3ヵ所
+        to: 3か所
+      - from: 3カ所
+        to: 3か所
+  - expected: か月
+    pattern:
+      - /ヶ月|ケ月|箇月|個月|ヵ月|カ月/
+    prh: >-
+      「か所」「か月」と表記する
+      https://smarthr.design/products/contents/idiomatic-usage/usage/
+    specs:
+      - from: 給与明細が1ヶ月単位で発行されます
+        to: 給与明細が1か月単位で発行されます
+      - from: 給与明細が1箇月単位で発行されます
+        to: 給与明細が1か月単位で発行されます
+  - expected: 改$1
+    pattern:
+      - /あらた([めま])/
+    specs:
+      - from: あらためて
+        to: 改めて
+  - expected: ほぐ$1
+    pattern:
+      - /(?<![正分理読])解([さしすせそ])/
+    prh: >-
+      平仮名にしたほうが読みやすい漢字は平仮名にする
+      https://smarthr.design/products/contents/writing-style/
+    specs:
+      - from: 解さない
+        to: ほぐさない
+      - from: 解して
+        to: ほぐして
+      - from: 解す
+        to: ほぐす
+      - from: 解せば
+        to: ほぐせば
+      - from: 解そう
+        to: ほぐそう
+      - from: 正解
+        to: 正解
+      - from: 分解
+        to: 分解
+      - from: 理解
+        to: 理解
+      - from: 読解
+        to: 読解
+  - expected: 手引き
+    pattern:
+      - /手引(?!き)/
+    prh: >-
+      送りがなを付けて表記する
+      https://smarthr.design/products/contents/idiomatic-usage/usage/#recm8V38MkxhYrKNr-0
+    specs:
+      - from: サーベイ実施の手引を参照
+        to: サーベイ実施の手引きを参照
+      - from: 手引き
+        to: 手引き
+  - expected: レビュアー
+    pattern:
+      - /レビュ(ア(?!ー)|ワー)/
+    prh: >-
+      ‐er、‐or、‐arで終わる単語は「長音あり」、-yで終わる単語は「長音なし」とする（例外あり）
+      https://smarthr.design/products/contents/idiomatic-usage/usage/
+    specs:
+      - from: レビュア
+        to: レビュアー
+      - from: レビュワー
+        to: レビュアー
+  - expected: ユーザビリティ
+    pattern:
+      - ユーザビリティー
+      - ユーザービリティ
+    prh: >-
+      ‐er、‐or、‐arで終わる単語は「長音あり」、-yで終わる単語は「長音なし」とする（例外あり）
+      https://smarthr.design/products/contents/idiomatic-usage/usage/
+    specs:
+      - from: ユーザービリティ
+        to: ユーザビリティ
+      - from: ユーザビリティー
+        to: ユーザビリティ
+  - expected: 並$1
+    pattern:
+      - /なら([びぶべ])(?!に)/
+    specs:
+      - from: 横ならび
+        to: 横並び
+      - from: 縦ならび
+        to: 縦並び
+      - from: ならび順
+        to: 並び順
+  - expected: マスターデータ
+    pattern:
+      - /(?<!部署|役職|雇用形態|等級|］|スキル|資格|研修|カスタム|システム標準|SmartHR ?|ドメイン)マスター(?!データ)/
+    prh: >-
+      マスターデータの総称は「マスターデータ」、総称以外は「◯◯マスター」と表記するhttps://smarthr.design/products/contents/idiomatic-usage/usage/
+    specs:
+      - from: マスター
+        to: マスターデータ
+      - from: 部署マスター
+        to: 部署マスター
+      - from: 役職マスター
+        to: 役職マスター
+      - from: 雇用形態マスター
+        to: 雇用形態マスター
+      - from: 等級マスター
+        to: 等級マスター
+      - from: SmartHRマスター
+        to: SmartHRマスター
+  - expected: 詳し
+    pattern:
+      - くわし
+    specs:
+      - from: くわしくは
+        to: 詳しくは
+  - expected: 検索フォーム
+    pattern:
+      - 検索ボックス
+    specs:
+      - from: 検索ボックスに入力
+        to: 検索フォームに入力
+  - expected: にもかかわらず
+    pattern:
+      - /(にも関わらず|にも拘らず|にも係わらず)/
+    prh: >-
+      「にもかかわらず」と平仮名で表記する
+      https://smarthr.design/products/contents/idiomatic-usage/usage/
+    specs:
+      - from: 入力したにも関わらず
+        to: 入力したにもかかわらず
+      - from: 入力したにも拘らず
+        to: 入力したにもかかわらず
+  - expected: 言語選択
+    pattern:
+      - /言語切(替え|り替え|替|換え|り換え|換)/
+    specs:
+      - from: 言語切替
+        to: 言語選択
+      - from: 言語切り替え
+        to: 言語選択
+      - from: 言語切替え
+        to: 言語選択
+      - from: 言語切換
+        to: 言語選択
+      - from: 言語切り換え
+        to: 言語選択
+      - from: 言語切換え
+        to: 言語選択
+  - expected: 健康保険組合
+    pattern:
+      - /健保組合|組合健保/
+    specs:
+      - from: 健保組合
+        to: 健康保険組合
+      - from: 組合健保
+        to: 健康保険組合
+  - expected: サンプル
+    pattern:
+      - ダミー
+    prh: 「サンプル」と表記し、「ダミー」は使用しない
+    specs:
+      - from: ダミー
+        to: サンプル
+      - from: ダミーデータ
+        to: サンプルデータ
+      - from: ダミーテキスト
+        to: サンプルテキスト
+  - expected: 文書配付
+    pattern:
+      - 文書配布
+    specs:
+      - from: 文書配布
+        to: 文書配付
+  - expected: シミュレーション
+    pattern:
+      - シュミレーション
+    specs:
+      - from: シュミレーション
+        to: シミュレーション

@@ -1,0 +1,31 @@
+{
+  "name": "swift-migration-guide-jp",
+  "version": "0.0.1",
+  "description": "The Swift Concurrency Migration Guide 日本語訳",
+  "main": "index.js",
+  "scripts": {
+    "prepare": "husky install",
+    "textlint": "textlint",
+    "lint": "textlint 'Guide.docc/**/*.md'"
+  },
+  "lint-staged": {
+    "Guide.docc/**/*.md": "npm run textlint -f pretty-error"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/stzn/swift-migration-guide-jp.git"
+  },
+  "author": "stzn",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/stzn/swift-migration-guide-jp/issues"
+  },
+  "homepage": "https://github.com/stzn/swift-migration-guide-jp#readme",
+  "devDependencies": {
+    "husky": "^9.0.11",
+    "lint-staged": "^15.2.5",
+    "textlint": "^14.0.4",
+    "textlint-rule-preset-smarthr": "^1.30.0",
+    "textlint-rule-prh": "^6.0.0"
+  }
+}

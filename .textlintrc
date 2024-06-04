@@ -1,0 +1,10 @@
+{
+  "rules": {
+    "preset-smarthr": true,
+    "prh": {
+        "rulePaths": [
+          "prh.yml"
+        ]
+    }
+  }
+}

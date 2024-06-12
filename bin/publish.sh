@@ -6,7 +6,7 @@ export DOCC_JSON_PRETTYPRINT="YES"
 
 output="./migration-guide"
 
-docc convert \
+(xcrun --find docc) convert \
     --experimental-enable-custom-templates \
     --hosting-base-path migration-guide \
     --output-path "$output" \

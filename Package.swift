@@ -20,6 +20,9 @@ let package = Package(
         .executable(name: "swift5_examples", targets: ["Swift5Examples"]),
         .executable(name: "swift6_examples", targets: ["Swift6Examples"]),
     ],
+    dependencies: [
+        .package(url: "https://github.com/apple/swift-docc-plugin", from: "1.1.0"),
+    ],
     targets: [
         .target(
             name: "Library"

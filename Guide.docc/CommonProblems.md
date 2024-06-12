@@ -78,7 +78,7 @@ nonisolated(unsafe) var islandsInTheSea = 42
 
 変数への全アクセスをロックやディスパッチキューといった外部同期メカニズムを使って慎重に管理しているときのみ `nonisolated(unsafe)` を使用してください。
 
-手動で同期を表すためのメカニズムは他にもたくさんあり、[Opting-Out of Isolation Checking]()（近日公開予定）で説明しています。
+手動で同期を表すためのメカニズムは他にもたくさんあり、[Opting-Out of Isolation Checking][]（近日公開予定）で説明しています。
 
 [Opting-Out of Isolation Checking]: #
 
@@ -119,7 +119,7 @@ class ChickenValley {
 選択肢の1つとして、グローバルアクターを使用して変数を単一のドメインに隔離する方法があります。
 しかし、その代わりに `Sendable` に直接準拠することも理にかなっています。
 
-`Sendable` に準拠する方法の詳細については、[Making Types Sendable]()（近日公開予定）の章を参照してください。
+`Sendable` に準拠する方法の詳細については、[Making Types Sendable][]（近日公開予定）の章を参照してください。
 
 [Making Types Sendable]: #
 

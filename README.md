@@ -1,12 +1,18 @@
 # The Swift Concurrency Migration Guide 日本語訳
 
+## 概説
+
 [The Swift Concurrency Migration Guide][swift-migration-guide]の日本語訳リポジトリです。
 
-このリポジトリには、[Swift-DocC][docc] を使ってビルドされた The Swift Concurrency Migration Guide のソースが含まれています。
+このリポジトリには、[Swift-DocC][docc] を使ってビルドされたThe Swift Concurrency Migration Guideのソースが含まれています。
+
+## 目的
+
+英語のドキュメントを読むことに負担を感じている日本語メインのSwiftエンジニアが、この日本語訳を通じてドキュメントの内容を理解し、Swift6への移行をスムーズに進めていけるようになることを目指しています。
 
 ## コントリビューションについて
 
-The Swift Concurrency Migration Guide に貢献する方法については、[CONTRIBUTING.md][contributing]をご参照ください。
+The Swift Concurrency Migration Guideに貢献する方法については、[CONTRIBUTING.md][contributing]をご参照ください。
 
 ## ビルド方法
 

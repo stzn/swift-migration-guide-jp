@@ -1,6 +1,6 @@
 # The Swift Concurrency Migration Guide 日本語訳
 
-## 概説
+## 概要
 
 [The Swift Concurrency Migration Guide][swift-migration-guide]の日本語訳リポジトリです。
 

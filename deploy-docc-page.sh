@@ -11,5 +11,4 @@ $DOCC_COMMAND convert Guide.docc \
 
 $DOCC_COMMAND process-archive transform-for-static-hosting \
   --output-path ./docs \
-  --hosting-base-path swift-migration-guide-jp \
   $DOCC_ARCHIVE

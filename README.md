@@ -6,9 +6,14 @@
 
 このリポジトリには、[Swift-DocC][docc] を使ってビルドされたThe Swift Concurrency Migration Guideのソースが含まれています。
 
+
 ## 目的
 
 英語のドキュメントを読むことに負担を感じている日本語メインのSwiftエンジニアが、この日本語訳を通じてドキュメントの内容を理解し、Swift6への移行をスムーズに進めていけるようになることを目指しています。
+
+## URL
+
+https://swift-migration-guide.jp/documentation/migrationguide/
 
 ## コントリビューションについて
 

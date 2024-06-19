@@ -19,6 +19,19 @@ npm install
 2. 作業用のブランチを作成し、変更をコミット&プッシュしてください
 3. このリポジトリの `main` ブランチに対してPRを開いてください
 
+※お願い  
+原文と翻訳の更新状況を把握しやすくするために、翻訳の冒頭に以下のようなコメントを追加してください。
+
+```markdown
+
+原文: https://github.com/apple/swift-migration-guide/blob/main/Guide.docc/DataRaceSafety.md
+
+更新日: 2024/6/19(翻訳を最後に更新した日付)
+
+ここまで反映: https://github.com/apple/swift-migration-guide/commit/96249774f73d9db641c1b6daaf2894eb9dbfc63b(翻訳した最新のコミットID)
+
+```
+
 ### ビルド方法
 
 リポジトリのルートディレクトリで `docc preview Guide.docc` を実行します。

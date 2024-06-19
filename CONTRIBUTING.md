@@ -19,7 +19,7 @@ npm install
 2. 作業用のブランチを作成し、変更をコミット&プッシュしてください
 3. このリポジトリの `main` ブランチに対してPRを開いてください
 
-※お願い  
+※ お願い  
 原文と翻訳の更新状況を把握しやすくするために、翻訳の冒頭に以下のようなコメントを追加してください。
 
 ```markdown
@@ -31,6 +31,16 @@ npm install
 ここまで反映: https://github.com/apple/swift-migration-guide/commit/96249774f73d9db641c1b6daaf2894eb9dbfc63b(翻訳した最新のコミットID)
 
 ```
+
+また、すでに存在しているドキュメントを更新する際は、最新のコミットと反映済みのコミットを比較して差分を確認してください。
+
+```
+https://github.com/apple/swift-migration-guide/compare/(翻訳に反映済みのコミットID)...(最新のコミットID)
+```
+
+例:  
+https://github.com/apple/swift-migration-guide/compare/1a734010d363947797e80b18008e3c4695e119a6...96249774f73d9db641c1b6daaf2894eb9dbfc63b
+
 
 ### ビルド方法
 

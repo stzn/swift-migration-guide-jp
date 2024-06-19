@@ -5,6 +5,7 @@
         "rulePaths": [
           "prh.yml"
         ]
-    }
+    },
+    "ja-no-mixed-period": false
   }
 }

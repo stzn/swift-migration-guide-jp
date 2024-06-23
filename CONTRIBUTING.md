@@ -10,14 +10,37 @@ npm install
 
 ### Issueを探す/立てる
 
-1. [Issues](https://github.com/stzn/swift-migration-guide-jp/issues)の中から解決したい Issue を選択(あるいは作成)してください
-2. 選択した Issue の Assignees に自身を設定してください 
+1. [Issues](https://github.com/stzn/swift-migration-guide-jp/issues)の中から解決したいIssueを選択(あるいは作成)してください
+2. 選択したIssueのAssigneesに自身を設定してください 
 
 ### PRを開く
 
-1. まずこのリポジトリを fork してください
+1. まずこのリポジトリをforkしてください
 2. 作業用のブランチを作成し、変更をコミット&プッシュしてください
 3. このリポジトリの `main` ブランチに対してPRを開いてください
+
+※ お願い  
+原文と翻訳の更新状況を把握しやすくするために、翻訳の冒頭に以下のようなコメントを追加してください。
+
+```markdown
+
+原文: https://github.com/apple/swift-migration-guide/blob/main/Guide.docc/DataRaceSafety.md
+
+更新日: 2024/6/19(翻訳を最後に更新した日付)
+
+ここまで反映: https://github.com/apple/swift-migration-guide/commit/96249774f73d9db641c1b6daaf2894eb9dbfc63b(翻訳した最新のコミットID)
+
+```
+
+また、すでに存在しているドキュメントを更新する際は、最新のコミットと反映済みのコミットを比較して差分を確認してください。
+
+```
+https://github.com/apple/swift-migration-guide/compare/(翻訳に反映済みのコミットID)...(最新のコミットID)
+```
+
+例:  
+https://github.com/apple/swift-migration-guide/compare/1a734010d363947797e80b18008e3c4695e119a6...96249774f73d9db641c1b6daaf2894eb9dbfc63b
+
 
 ### ビルド方法
 
@@ -36,4 +59,10 @@ DocCを実行した後、`docc` が出力するリンクを開いて、ブラウ
 
 ### PRのレビューについて
 
-PRを開くと、レビュアーが自動でアサインされます。コードレビュー中に変更を求められた場合、必要な修正を行い、準備ができたらレビュアーに再度レビューを依頼してください。
+このガイドは、Swiftコミュニティーの多くの方のご意見を取り入れたいと考えています。そこでレビューは以下のステップで進めます。
+
+1. PRが開かれると、担当者(※)がレビュー期間を設定し、SNSや勉強会などで告知する
+2. レビュー期間中は適宜提案や修正をする
+3. 期間終了後、担当者が最終的なレビューを実施し、Approve後マージする
+
+※ 担当者: リポジトリオーナー、コラボレーター、もしくはIssueを立てた人(複数可)

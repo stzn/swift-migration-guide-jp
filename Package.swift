@@ -1,4 +1,4 @@
-// swift-tools-version: 5.10
+// swift-tools-version: 6.0
 
 import PackageDescription
 
@@ -14,31 +14,34 @@ let package = Package(
     ],
     products: [
         .library(
-            name: "FullyMigratedModule",
-            targets: [
-                "FullyMigratedModule",
-                "MigrationInProgressModule",
-            ]
+            name: "Library",
+            targets: ["Library"]
         ),
+        .executable(name: "swift5_examples", targets: ["Swift5Examples"]),
+        .executable(name: "swift6_examples", targets: ["Swift6Examples"]),
     ],
     targets: [
         .target(
-            name: "FullyMigratedModule"
+            name: "Library"
+        ),
+        .testTarget(
+            name: "LibraryXCTests",
+            dependencies: ["ObjCLibrary", "Library"]
         ),
         .target(
-            name: "MigrationInProgressModule",
-            dependencies: ["FullyMigratedModule"]
+            name: "ObjCLibrary",
+            publicHeadersPath: "."
         ),
-    ],
-    swiftLanguageVersions: [.v5]
+        .executableTarget(
+            name: "Swift5Examples",
+            dependencies: ["Library"],
+            swiftSettings: [
+                .swiftLanguageVersion(.v5)
+            ]
+        ),
+        .executableTarget(
+            name: "Swift6Examples",
+            dependencies: ["Library"]
+        )
+    ]
 )
-
-let swiftSettings: [SwiftSetting] = [
-    .enableExperimentalFeature("StrictConcurrency")
-]
-
-for target in package.targets {
-    var settings = target.swiftSettings ?? []
-    settings.append(contentsOf: swiftSettings)
-    target.swiftSettings = settings
-}

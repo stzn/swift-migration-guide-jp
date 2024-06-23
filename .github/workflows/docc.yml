@@ -1,0 +1,32 @@
+name: Deploy DocC Page
+
+on: 
+  push:
+    branches:
+      - main
+env: 
+  DEVELOPER_DIR: "/Applications/Xcode_15.3.app/Contents/Developer"
+jobs:
+  BuildDocCArchive:
+    runs-on: macos-14
+    steps:
+      - uses: actions/checkout@v3
+      - name: Build DocC Archive
+        run: |
+          ./deploy-docc-page.sh
+      - uses: actions/upload-pages-artifact@v2
+        with:
+          path: docs
+  DeployDocC:
+    needs: BuildDocCArchive
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v2

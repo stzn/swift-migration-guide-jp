@@ -1,6 +1,8 @@
 {
   "rules": {
-    "preset-smarthr": true,
+    "preset-smarthr": {
+      "ja-no-mixed-period": false
+    },
     "prh": {
         "rulePaths": [
           "prh.yml"

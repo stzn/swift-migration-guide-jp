@@ -6,3 +6,5 @@
 /Guide.docc/header.html
 /migration-guide
 node_modules/
+*.doccarchive
+docs

@@ -297,7 +297,7 @@ class Chicken: @preconcurrency Feedable {
 @MainActor
 class Chicken: Feedable {
     nonisolated func eat(food: Pineapple) {
-        // おそらくこの実装では他のメインアクター隔離状態を使用しない
+        // 多分この実装では他のメインアクター隔離状態を使用しない
     }
 }
 ```

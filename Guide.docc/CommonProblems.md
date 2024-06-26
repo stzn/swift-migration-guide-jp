@@ -2,6 +2,11 @@
 
 本ページではSwift Concurrencyを使用した際によく目にする問題を特定し、理解し、対処します。
 
+|原文|[https://github.com/apple/swift-migration-guide/blob/main/Guide.docc/CommonProblems.md](https://github.com/apple/swift-migration-guide/blob/main/Guide.docc/CommonProblems.md)|
+|---|---|
+|更新日|2024/6/26(翻訳を最後に更新した日付)|
+|ここまで反映|[https://github.com/apple/swift-migration-guide/commit/0d6f51d313f1e5c5f439960021b22a932ec29220](https://github.com/apple/swift-migration-guide/commit/0d6f51d313f1e5c5f439960021b22a932ec29220)|
+
 コンパイラによって保証されるデータ隔離はすべてのSwiftのコードに影響します。
 これは、たとえ対象がSwift Concurrencyの言語機能を直接使用しないSwift 5のコードであっても、complete concurrency checkingによって、その中の潜在的な問題を浮き彫りにできることを意味します。
 また、Swift 6言語モードをオンにすると、これらの潜在的な問題のいくつかがエラーとして扱われるようになります。

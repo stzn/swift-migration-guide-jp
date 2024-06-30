@@ -33,7 +33,7 @@ WWDCのセッションの字幕を参考にしています(セッションによ
 |non-isolated|非隔離|-|
 |protocol|プロトコル|-|
 |requirement|要件|-|
-|static|静的変数|-|
+|static|静的|-|
 |strict|厳密|-|
 |Swift Concurrency|Swift Concurrency|固有名詞として使用する場合|
 |Swift 6 language mode|Swift 6言語モード|-|

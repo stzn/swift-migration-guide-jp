@@ -4,7 +4,7 @@
 
 |原文|[https://github.com/apple/swift-migration-guide/blob/main/Guide.docc/CommonProblems.md](https://github.com/apple/swift-migration-guide/blob/main/Guide.docc/CommonProblems.md)|
 |---|---|
-|更新日|2024/6/26(翻訳を最後に更新した日付)|
+|更新日|2024/6/30(翻訳を最後に更新した日付)|
 |ここまで反映|[https://github.com/apple/swift-migration-guide/commit/0d6f51d313f1e5c5f439960021b22a932ec29220](https://github.com/apple/swift-migration-guide/commit/0d6f51d313f1e5c5f439960021b22a932ec29220)|
 
 コンパイラによって保証されるデータ隔離はすべてのSwiftのコードに影響します。

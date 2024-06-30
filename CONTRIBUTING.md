@@ -20,6 +20,7 @@ npm install
 3. このリポジトリの `main` ブランチに対してPRを開いてください
 
 ※ お願い  
+
 原文と翻訳の更新状況を把握しやすくするために、翻訳の冒頭に以下のようなコメントを追加してください。
 
 ```markdown
@@ -41,6 +42,7 @@ https://github.com/apple/swift-migration-guide/compare/(翻訳に反映済みの
 例:  
 https://github.com/apple/swift-migration-guide/compare/1a734010d363947797e80b18008e3c4695e119a6...96249774f73d9db641c1b6daaf2894eb9dbfc63b
 
+頻出の単語は[辞書](dictionary.md)にまとめています。翻訳の際に参考にしてください。追加や修正があれば[issue](https://github.com/stzn/swift-migration-guide-jp/issues)を立て、翻訳しているブランチとは別でPRを出してください。  
 
 ### ビルド方法
 

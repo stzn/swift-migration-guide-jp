@@ -1,42 +1,35 @@
-# Common Compiler Errors
+# 頻出のコンパイルエラー
 
-Identify, understand, and address common problems you'll encounter while
-working with Swift concurrency.
+本ページではSwift Concurrencyを使用した際によく目にする問題を特定し、理解し、対処します。
 
-The data isolation guarantees made by the compiler affect all Swift code.
-This means complete concurrency checking can surface latent issues,
-even in Swift 5 code that doesn't use any concurrency language features
-directly.
-And, with the Swift 6 language mode is on, some of these potential issues
-can become errors.
+|原文|[https://github.com/apple/swift-migration-guide/blob/main/Guide.docc/CommonProblems.md](https://github.com/apple/swift-migration-guide/blob/main/Guide.docc/CommonProblems.md)|
+|---|---|
+|更新日|2024/6/30(翻訳を最後に更新した日付)|
+|ここまで反映|[https://github.com/apple/swift-migration-guide/commit/0d6f51d313f1e5c5f439960021b22a932ec29220](https://github.com/apple/swift-migration-guide/commit/0d6f51d313f1e5c5f439960021b22a932ec29220)|
 
-After enabling complete checking, many projects can contain a large
-number of warnings and errors.
-_Don't_ get overwhelmed!
-Most of these can be tracked down to a much smaller set of root causes.
-And these causes, frequently, are a result of common patterns which aren't 
-just easy to fix, but can also very instructive in helping to understand
-Swift's data isolation model.
+コンパイラによって保証されるデータ隔離はすべてのSwiftのコードに影響します。
+これにより、完全な並行性の確認は、直接並行処理の言語機能を使用していないSwift 5のコードでも潜在的な問題を浮き彫りにすることがあります。
+また、Swift 6言語モードをオンにすると、これらの潜在的な問題のいくつかがエラーとして扱われるようになります。
 
-## Unsafe Global and Static Variables
+完全確認を有効にすると、多くのプロジェクトで大量の警告やエラーが発生する可能性があります。
+圧倒されないでください！
+警告やエラーをたどっていくと、そのほとんどが小さな根本的原因の積み重ねによるものだとわかります。
+そして、その原因は共通のパターンによるもので、簡単に修正できるだけでなく、Swiftのデータ隔離モデルを理解するのにも役立ちます。
 
-Global state, including static variables, are accessible from anywhere in a
-program.
-This visibility makes them particularly susceptible to concurrent access.
-Before data-race safety, global variable patterns relied on programmers
-carefully accessing global state in ways that avoided data-races
-without any help from the compiler.
+## 安全でないグローバルおよび静的変数
 
-### Sendable Types
+静的変数を含むグローバルな状態はプログラムのどこからでもアクセスできます。
+この可視性により、グローバルな状態は特に同時アクセスの影響を受けやすくなります。
+データ競合の安全性が確立される以前の環境でグローバル変数へアクセスする際は、プログラマーはコンパイラのサポートなしに自分で工夫してデータ競合を避けていました。
+
+### Sendable型
 
 ```swift
 var islandsInTheSea = 42
 ```
 
-Here, we have defined a global variable.
-The global variable is both non-isolated _and_ mutable from any
-isolation domain. Compiling the above code in Swift 6 mode
-produces an error message:
+ここにグローバル変数を宣言しました。
+このグローバル変数は隔離されておらず、 _かつ_ どの隔離ドメインからも変更可能です。Swift 6モードでこのコードをコンパイルするとエラーメッセージが表示されます。
 
 ```
 1 | var islandsInTheSea = 42
@@ -47,10 +40,7 @@ produces an error message:
 2 |
 ```
 
-Two functions with different isolation domains accessing this
-variable risks a data race. In the following code, `printIslands()`
-could be running on the main actor concurrently with a call to
-`addIsland()` from another isolation domian:
+異なる隔離ドメインを持つ2つの関数がこの変数にアクセスすると、データ競合のリスクがあります。次のコードでは、 `printIslands()` がメインアクター上で動作するのと同時に、別の隔離ドメインから `addIsland()` が呼び出される可能性があります。
 
 ```swift
 @MainActor
@@ -67,50 +57,40 @@ func addIsland() {
 }
 ```
 
-One way to address the problem is by changing variable's isolation.
+問題に対処する1つの方法は、変数の隔離方法を変更することです。
 
 ```swift
 @MainActor
 var islandsInTheSea = 42
 ```
 
-The variable remains mutable, but has been isolated to a global actor.
-All accesses can now only happen in one isolation domain, and the synchronous
-access within `addIsland` would be invalid at compile time.
+変数は可変のままですが、グローバルアクターに隔離されるようになります。
+すべてのアクセスは1つの隔離ドメイン内でのみ起こるようになり、 `addIsland` 内での同期アクセスはコンパイル時に無効になります。
 
-If the variable is meant to be constant and is never mutated,
-a straight-forward solution is to express this to the compiler.
-By changing the `var` to a `let`, the compiler can statically
-disallow mutation, guaranteeing safe read-only access.
+もし変数が定数であり変更されないのであれば、単純な解決策はそれをコンパイラに明示することです。
+`var` を `let` に変更することでコンパイラは変更を静的に禁止でき、安全な読み取り専用アクセスを保証します。
 
 ```swift
 let islandsInTheSea = 42
 ```
 
-If there is synchronization in place that protects this variable in a way that
-is invisible to the compiler, you can disable all isolation checking for
-`islandsInTheSea` using the `nonisolated(unsafe)` keyword:
+もしこの変数を保護するための同期機構があり、それがコンパイラに見えない場合は、`nonisolated(unsafe)` キーワードを使って `islandsInTheSea` のすべての隔離チェックを無効化できます。
 
 ```swift
-/// This value is only ever accessed while holding `islandLock`.
+/// `islandLock` を保持している間だけこの値にアクセスしてよい。
 nonisolated(unsafe) var islandsInTheSea = 42
 ```
 
-Only use `nonisolated(unsafe)` when you are carefully guarding all access to
-the variable with an external synchronization mechanism such as a lock or
-dispatch queue.
+`nonisolated(unsafe)` は、ロックやディスパッチキューなどの外部同期機構で変数へのすべてのアクセスを慎重に保護している場合にのみ使用してください。
 
-There are many other mechanisms for expressing manual synchronization,
-described in [Opting-Out of Isolation Checking][] (forthcoming).
+手動同期を表現するための他の多くのメカニズムについては、[隔離チェックのオプトアウト][]（近日公開予定）で説明しています。
 
 [Opting-Out of Isolation Checking]: #
 
-### Non-Sendable Types
+### 非Sendable型
 
-In the above examples, the variable is an `Int`,
-a value type that is inherently `Sendable`.
-Global _reference_ types present an additional challenge, because they
-are typically not `Sendable`.
+先の例では、変数は `Int` 型で、本質的に `Sendable` である値型です。
+グローバルな _参照_ 型は一般的に `Sendable` でないため、さらに困難を伴います。
 
 ```swift
 class Chicken {
@@ -121,10 +101,8 @@ class Chicken {
 }
 ```
 
-The problem with this `static let` declaration is not related to the
-mutability of the variable.
-The issue is `Chicken` is a non-Sendable type, making its internal state
-unsafe to share across isolation domains.
+この `static let` 宣言の問題は、変数が変更可能かどうかには関係ありません。
+問題は、 `Chicken` が非Sendable型であるため、その内部状態を異なる隔離ドメイン間で安全に共有できないことです。
 
 ```swift
 func feedPrizedHen() {
@@ -141,44 +119,32 @@ class ChickenValley {
 }
 ```
 
-Here, we see two functions that could access the internal state of the
-`Chicken.prizedHen` concurrently.
-The compiler only permits these kinds of cross-isolation accesses with
-`Sendable` types.
-One option is to isolate the variable to a single domain using a global actor.
-But, it could also make sense to instead add a conformance to `Sendable`
-directly.
+ここでは、`Chicken.prizedHen` の内部状態に同時にアクセスする可能性がある2つの関数を示しています。
+コンパイラは、このような異なる隔離ドメイン間のアクセスをSendableな型に対してのみ許可します。
+1つの選択肢として、グローバルアクターを使用して変数を単一のドメインに隔離することが考えられます。
+しかし、代わりにSendableへの準拠を直接追加するのも有効です。
 
-For more details how how to add `Sendable` conformances, see the section on
-[Making Types Sendable][] (forthcoming).
+`Sendable` に準拠する方法の詳細については、[型をSendableにする方法][]（近日公開予定）の章を参照してください。
 
 [Making Types Sendable]: #
 
-> For more global and static variable code examples, see (link to relevant Swift file in package).
+> グローバルであり静的な変数のコードのさらなる例については、（パッケージ内の関連するSwiftファイルへのリンク）を参照してください。
 
-## Protocol Conformance Isolation Mismatch
+## プロトコル準拠時の隔離不一致
 
-A protocol defines requirements that a conforming type must satisfy.
-Swift ensures that clients of a protocol can interact with its methods and
-properties in a way that respects data isolation.
-To do this, both the protocol itself and its requirements must specify
-static isolation.
-This can result in isolation mismatches between a protocol's declaration and
-conforming types.
+プロトコルは、準拠する型が満たさなければならない要件を定義します。
+Swiftは、プロトコルのクライアントがそのメソッドやプロパティと対話する際にデータの隔離を尊重するようにします。
+このためには、プロトコル自体とその要件の両方が静的な隔離を指定する必要があります。
+これにより、プロトコルの宣言と準拠する型の間に隔離の不一致が生じることがあります。
 
-There are many possible solutions to this class of problem, but they often
-involve trade-offs.
-Choosing an appropriate approach first requires understanding _why_ there is a
-mismatch in the first place.
+この種の問題に対してはさまざまな解決策が考えられますが、トレードオフを伴うことが多いです。
+適切なアプローチを選ぶには、まず、そもそも _なぜ_ 不一致が発生するのかを理解する必要があります。
 
-### Under-Specified Protocol
+### 明示的に隔離されていないプロトコル
 
-The most commonly-encountered form of this problem happens when a protocol
-has no explicit isolation.
-In this case, as with all other declarations, this implies _non-isolated_.
-Non-isolated protocol requirements can be called from generic code in any
-isolation domain. If the requirement is synchronous, it is invalid for
-a conforming type's implementation to access actor-isolated state:
+この問題で最も一般的に遭遇する形は、プロトコルに明示的な隔離がない場合です。
+この場合、他のすべての宣言と同様に、 _非隔離_ であることを意味します。
+非隔離のプロトコル要件は、どの隔離ドメインでもプロトコルで抽象化したコードから呼び出すことができます。もし要件が同期的であれば、準拠する型の実装がアクター隔離された状態にアクセスすることは無効です。
 
 ```swift
 protocol Feedable {
@@ -188,12 +154,12 @@ protocol Feedable {
 @MainActor
 class Chicken: Feedable {
     func eat(food: Pineapple) {
-        // access main-actor-isolated state
+        // メインアクター隔離された状態へのアクセス
     }
 }
 ```
 
-The above code produces the following error in Swift 6 mode:
+上記のコードは、Swift 6モードで次のエラーを生成します。
 
 ```
  5 | @MainActor
@@ -201,65 +167,53 @@ The above code produces the following error in Swift 6 mode:
  7 |     func eat(food: Pineapple) {
    |          |- error: main actor-isolated instance method 'eat(food:)' cannot be used to satisfy nonisolated protocol requirement
    |          `- note: add 'nonisolated' to 'eat(food:)' to make this instance method not isolated to the actor
- 8 |         // access main-actor-isolated state
+ 8 |         // メインアクター隔離された状態へのアクセス
  9 |     }
 ```
 
-It is possible that the protocol actually _should_ be isolated, but
-just has not yet been updated for concurrency.
-If conforming types are migrated to add correct isolation first, mismatches
-will occur.
+プロトコルは実際には _隔離されるべき_ 可能性もありますが、まだ並行処理に対応して更新されていないだけかもしれません。
+正しい隔離を追加するために準拠する型を先に移行すると、不一致が発生します。
 
 ```swift
-// This really only makes sense to use from MainActor types, but
-// has not yet been updated to reflect that.
+// このプロトコルは実際にはMainActor型から使用するのが適切だが、まだそれを反映するように更新されていない。
 protocol Feedable {
     func eat(food: Pineapple)
 }
 
-// A conforming type, which is now correctly isolated, has exposed 
-// a mismatch.
+// 準拠している型は現在正しく隔離されており、この不一致を明らかにした。
 @MainActor
 class Chicken: Feedable {
 }
 ```
 
-#### Adding Isolation
+#### 隔離の追加
 
-If protocol requirements are always called from the main actor,
-adding `@MainActor` is the best solution.
+プロトコルの要件が常にメインアクターから呼び出される場合、 `@MainActor` を追加することが最適な解決策です。
 
-There are two ways to isolate a protocol requirement to the main actor:
+プロトコルの要件をメインアクターに隔離する方法は2つあります。
 
 ```swift
-// entire protocol
+// プロトコル全体
 @MainActor
 protocol Feedable {
     func eat(food: Pineapple)
 }
 
-// per-requirement
+// 要件ごと
 protocol Feedable {
     @MainActor
     func eat(food: Pineapple)
 }
 ```
 
-Marking a protocol with a global actor attribute implies global actor isolation
-on all protocol requirements and extension methods. The global actor is also
-inferred on conforming types when the conformance is not declared in an
-extension.
+プロトコルにグローバルアクター属性をつけると、すべてのプロトコル要件およびextensionメソッドに対してグローバルアクター隔離が適用されます。
+また、準拠がextensionで宣言されていない場合、準拠する型にもグローバルアクターが推論されます。
 
-Per-requirement isolation has a narrower impact on actor isolation inference,
-because inference only applies to the implementation of that requirement. It
-does not impact the inferred isolation of protocol extensions or other methods
-on the conforming type. This approach should be favored if it makes sense to
-have conforming types that aren't necessarily also tied to the same global actor.
+推論は要件の実装にのみ適用されるため、要件ごとの隔離がアクター隔離の推論に与える影響はより限定的です。プロトコルのextensionや準拠型のその他のメソッドに対する隔離の推論には影響を与えません。
+準拠型に同一のグローバルアクターが必ずしも結びつかないことに意味があるならこちらのアプローチが好ましいです。
 
-Either way, changing the isolation of a protocol can affect the isolation of
-conforming types and it can impose restrictions on generic code using the
-protocol in a generic requirement. You can stage in diagnostics caused by
-adding global actor isolation on a protocol using `@preconcurrency`:
+いずれにせよ、プロトコルの隔離を変更すると、準拠する型の隔離に影響を与え、ジェネリックな要件でプロトコルを使用し抽象化したコードに制約を課す可能性があります。
+そこで、 `@preconcurrency` を使うことで、プロトコルへグローバルアクター隔離を追加することで生じる診断を段階的に進めることができます。
 
 ```swift
 @preconcurrency @MainActor
@@ -268,16 +222,12 @@ protocol Feedable {
 }
 ```
 
-> Link to "isolate the protocol" code examples
+> "プロトコル隔離"のコード例へのリンク
 
-#### Asynchronous Requirements
+#### 非同期要件
 
-For methods that implement synchronous protocol requirements, either the
-isolation of method must match the isolation of the requirement exactly,
-or the method must be `nonisolated`, meaning it can be called from
-any isolation domain without risk of data races. Making a requirement
-asynchronous offers a lot more flexibility over the isolation in
-conforming types.
+同期プロトコル要件を実装するメソッドの場合、メソッドの隔離が要件の隔離と正確に一致するか、メソッドが `nonisolated` でなければなりません。 `nonisolated` にすることで任意の隔離ドメインからデータ競合のリスクなしに呼び出すことができます。
+要件を非同期にすることで準拠する型の隔離に対してはるかに多くの柔軟性が提供されます。
 
 ```swift
 protocol Feedable {
@@ -285,102 +235,85 @@ protocol Feedable {
 }
 ```
 
-Because `async` methods guarantee isolation by switching to the corresponding
-actor in the implementation, it's possible to satisfy a non-isolated `async`
-protocol requirement with an isolated method:
+`async` メソッドは実装中に対応するアクターに切り替わることで隔離を保証するため、非隔離の `async` プロトコル要件を隔離されたメソッドを用いて満たすことができます。
 
 ```swift
 @MainActor
 class Chicken: Feedable {
     var isHungry: Bool = true
     func eat(food: Pineapple) {
-        // implicit switch to the @MainActor before accessing main actor state
+        // メインアクターの状態にアクセスする前に @MainActor に暗黙的に切り替わる
 
         isHungry.toggle()
     }
 }
 ```
 
-The above code is safe, because generic code must always call `eat(food:)`
-asynchronously, allowing isolated implementations to switch actors before
-accessing actor-isolated state.
+上記のコードは安全です。なぜなら、抽象化したコードは常に `eat(food:)` を非同期に呼び出さなければならず、これにより隔離された実装がアクター隔離状態にアクセスする前にアクターを切り替えることができるからです。
 
-However, this flexibility comes at a cost.
-Changing a method to be asynchronous can have a significant impact at
-every call site.
-In addition to an async context, both the parameters and return values may
-need to cross isolation boundaries.
-Together, these could require significant structural changes to address.
-This may still be the right solution, but the side-effects should be carefully
-considered first, even if only a small number of types are involved.
+しかし、この柔軟性には代償があります。
+メソッドを非同期に変更することは、すべての呼び出し箇所に大きな影響を与える可能性があります。
+非同期コンテキストに加え、パラメータと戻り値の両方が隔離境界を越える必要があるかもしれません。
+これらは大幅な構造変更を必要とすることがあります。
+この方法が正しい解決策であるかもしれませんが、関与する型が少数であっても、その副作用を慎重に考慮する必要があります。
 
-#### Using Preconcurrency
+#### Preconcurrencyの活用
 
-Swift has a number of mechanisms to help you adopt concurrency incrementally
-and interoperate with code that has not yet begun using concurrency at all.
-These tools can be helpful both for code you do not own, as well as code you
-do own, but cannot easily change.
+Swiftには、並行処理を段階的に導入し、まだ並行処理を全く使用していないコードと相互運用するための多くのメカニズムがあります。
+これらのツールは、自分が所有していないコードはもちろん、所有しているが簡単に変更できないコードに対しても役立ちます。
 
 ```swift
 @MainActor
 class Chicken: Feedable {
     nonisolated func eat(food: Pineapple) {
         MainActor.assumeIsolated {
-            // implementation body
+            // 本体の実装
         }
     }
 }
 
-// Improved ergonomics and safety with Swift 6's DynamicActorIsolation
+// Swift 6のDynamicActorIsolationにより使いやすさと安全性が改善された
 @MainActor
 class Chicken: @preconcurrency Feedable {
     func eat(food: Pineapple) {
-        // implementation body
+        // 本体の実装
     }
 }
 ```
 
-This technique involves two steps.
-It first removes any static isolation that is causing the mismatch.
-Then, it re-introduces the isolation dynamically, to allow useful
-work within the function body.
-This keeps the solution localized to the source of the compiler error.
-It is also a great option for making isolation changes incrementally.
+この技術は2つのステップからなります。
+まず、不一致を引き起こしている静的な隔離を取り除きます。
+次に、関数本体内で有効な作業を行なうために、隔離を動的に再導入します。
+これによりコンパイルエラーの発生源に限った解決となります。
+また、隔離の変更を段階的に行なう際の優れたオプションです。
 
-> Link to "preconcurrency protocols" code examples
+> "preconcurrency protocols"のコード例へのリンク
 
-### Isolated Conforming Type
+### 隔離された準拠型
 
-So far, the solutions presented assume that the cause of the isolation
-mismatches are ultimately rooted in the protocol definition.
-But, it could be that the protocol's static isolation is appropriate,
-and the issue instead is only caused by the conforming type.
+これまでに紹介した解決策は、隔離の不一致の原因が最終的にプロトコルの定義にあると仮定しています。
+しかし、プロトコルの静的な隔離は適切で、準拠する型だけが問題の原因である可能性もあります。
 
-#### Non-Isolated
+#### 非隔離
 
-Even a completely non-isolated function can still be useful.
+完全に非隔離の関数でも、依然として有用である場合があります。
 
 ```swift
 @MainActor
 class Chicken: Feedable {
     nonisolated func eat(food: Pineapple) {
-        // perhaps this implementation doesn't involve
-        // other MainActor-isolated state
+        // 多分この実装では他のメインアクター隔離状態を使用しない
     }
 }
 ```
 
-The downside to such an implementation is that isolated state and
-functions become unavailable.
-This is definitely a major constraint, but could still be
-appropriate, especially if it is used exclusively as a source of
-instance-independent configuration.
+このような実装の欠点は、隔離された状態や関数が利用できなくなることです。
+これは確かに大きな制約ですが、それでも適切である場合があります。特に、インスタンスに依存しない設定のソースとしてのみ使用される場合にはなおさらです。
 
-#### Conformance by Proxy
+#### プロキシによる準拠
 
-It could be possible to use an intermediate type to help address static
-isolation differences.
-This can be particularly effective if the protocol requires inheritance by its conforming types.
+静的隔離の違いに対処するために中間型が使用できます。
+これは、プロトコルが準拠する型へ継承を要求する場合に特に効果的です。
 
 ```swift
 class Animal {
@@ -390,14 +323,13 @@ protocol Feedable: Animal {
     func eat(food: Pineapple)
 }
 
-// actors cannot have class-based inheritance
+// アクターはクラスベースの継承を持つことができない
 actor Island: Feedable {
 }
 ```
 
-Introducing a new type to conform indirectly can make this situation work.
-However, this solution will require some structural changes to `Island` that
-could spill out code that depends on it as well.
+新しい型を導入して間接的に準拠させることで、この状況を解決できます。
+しかし、この解決策は `Island` の構造的な変更を必要とし、それに依存するコードにも影響を与える可能性があります。
 
 ```swift
 struct LivingIsland: Feedable {
@@ -406,13 +338,12 @@ struct LivingIsland: Feedable {
 }
 ```
 
-Here, a new type has been created that can satisfy the needed inheritance.
-Incorporating will be easiest if the conformance is only used internally by
-`Island`.
+ここでは、必要な継承を満たすために新しい型を作成しました。
+もしこの準拠した型（`LivingIsland`）が `Island` によって内部だけで使用されるのなら、`Island`の内部に含めるのがもっとも簡単な方法でしょう。
 
-> Link to "conformance proxy" code examples
+> "準拠型プロキシ"コード例へのリンク
 
-> Examples of diagnostics produced by the Swift 5.10 compiler for these issues include:  
+> 次のような問題点に対するSwift 5.10コンパイラによる診断の例
 >  
 > `Actor-isolated instance method '_' cannot be used to satisfy nonisolated protocol requirement`  
 >  

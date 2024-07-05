@@ -5,7 +5,7 @@
 |原文|[https://github.com/apple/swift-migration-guide/blob/main/Guide.docc/CommonProblems.md](https://github.com/apple/swift-migration-guide/blob/main/Guide.docc/CommonProblems.md)|
 |---|---|
 |更新日|2024/6/30(翻訳を最後に更新した日付)|
-|ここまで反映|[https://github.com/apple/swift-migration-guide/commit/0d6f51d313f1e5c5f439960021b22a932ec29220](https://github.com/apple/swift-migration-guide/commit/0d6f51d313f1e5c5f439960021b22a932ec29220)|
+|ここまで反映|[https://github.com/apple/swift-migration-guide/commit/6487820801552379ffdcb2b166ca0b97c73b697a](https://github.com/apple/swift-migration-guide/commit/6487820801552379ffdcb2b166ca0b97c73b697a)|
 
 コンパイラによって保証されるデータ隔離はすべてのSwiftのコードに影響します。
 これにより、完全な並行性の確認は、直接並行処理の言語機能を使用していないSwift 5のコードでも潜在的な問題を浮き彫りにすることがあります。

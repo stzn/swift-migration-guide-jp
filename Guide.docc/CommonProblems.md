@@ -328,3 +328,381 @@ extension CustomWindowStyle: Styler {
 
 ここでは、必要な継承を満たすために新しい型を作成しました。
 もしこの準拠した型（`CustomWindowStyle`）が `WindowStyler` によって内部だけで使用されるのなら、`WindowStyler`の内部に含めるのがもっとも簡単な方法でしょう。
+
+## 隔離境界の横断
+
+コンパイラは、データ競合を起こさないと証明できる場合にのみ、ある隔離ドメインから他のドメインへ値が移動することを許可します。
+隔離境界を越える可能性のあるコンテキストでこの要件を満たさない値を使うことは非常にありふれた問題です。
+そして、ライブラリやフレームワークはSwiftの並行処理機能を使うためにアップデートされる可能性があるため、自分のコードを変更していなくてもこれらの問題が発生する可能性があります。
+
+> Experiment: これらのコード例をパッケージの形式で提供しています。[Boundaries.swift][Boundaries]で試してみてください。
+
+[Boundaries]: https://github.com/apple/swift-migration-guide/blob/main/Sources/Examples/Boundaries.swift
+
+### 暗黙的なSendable型
+
+多くの値型は `Sendable` なプロパティのみで構成されています。
+コンパイラはそのような型を暗黙的に `Sendable` として扱いますが、それはpublicでない場合 _のみ_ です。
+
+```swift
+public struct ColorComponents {
+    public let red: Float
+    public let green: Float
+    public let blue: Float
+}
+
+@MainActor
+func applyBackground(_ color: ColorComponents) {
+}
+
+func updateStyle(backgroundColor: ColorComponents) async {
+    await applyBackground(backgroundColor)
+}
+```
+
+`Sendable` への準拠は型の公開APIの取り決めの一部であり、定義するかどうかは自分次第です。
+Because `ColorComponents` is marked `public`, it will not implicitly conform to `Sendable`.
+`ColorComponents` には `public` がついているため、 `Sendable` への暗黙的な準拠を行ないません。
+これは次のようなエラーになります：
+
+```
+ 6 | 
+ 7 | func updateStyle(backgroundColor: ColorComponents) async {
+ 8 |     await applyBackground(backgroundColor)
+   |           |- error: sending 'backgroundColor' risks causing data races
+   |           `- note: sending task-isolated 'backgroundColor' to main actor-isolated global function 'applyBackground' risks causing data races between main actor-isolated and task-isolated uses
+ 9 | }
+10 | 
+```
+
+簡単な解決策は、型の `Sendable` への準拠を明示的に行なうことです：
+
+```swift
+public struct ColorComponents: Sendable {
+    // ...
+}
+```
+
+たとえ些細な場合でも、 `Sendable` へ準拠は常に注意して行なうべきです。
+`Sendable` はスレッド安全の保証であり準拠をやめることはAPIの破壊的な変更であることを忘れないでください。
+
+### Preconcurrencyによるインポート
+
+他のモジュール内の型が実際には `Sendable` であったとしても、いつもその定義を変更できるとは限りません。
+その場合は `@preconcurrency import` を使うことでライブラリがアップデートされるまで診断を格下げできます。
+
+```swift
+// ColorComponentsはこのモジュールに定義されている
+@preconcurrency import UnmigratedModule
+
+func updateStyle(backgroundColor: ColorComponents) async {
+    // ここで隔離ドメインを横断している
+    await applyBackground(backgroundColor)
+}
+```
+
+`@preconcurrency import` を追加したため、 `ColorComponents` は依然として非 `Sendable` なままです。
+しかしコンパイラのふるまいは変更されます。
+Swift 6言語モードを使用しているなら、ここで生成されるエラーは警告に格下げされます。
+Swift 5言語モードの場合は診断は全く生成されません。
+
+### 潜在的な隔離
+
+時として、`Sendable` 型が必要と _思われる_ ことが、実はより根本的な隔離の問題の兆候であることがあります。
+
+型が `Sendable` でなければならない唯一の理由は隔離境界を越えるためです。
+もし境界を越えることを完全に避けられるなら、結果がよりシンプルに、かつシステムの本質をよりよく反映したものになることが多いです。
+
+```swift
+@MainActor
+func applyBackground(_ color: ColorComponents) {
+}
+
+func updateStyle(backgroundColor: ColorComponents) async {
+    await applyBackground(backgroundColor)
+}
+```
+
+この `updateStyle(backgroundColor:)` 関数は非隔離です。
+これは非 `Sendable` な引数も非隔離であることを意味します。
+`applyBackground(_:)` が呼ばれると、実装はこの非隔離ドメインから `MainActor` へただちに横断します。
+
+`updateStyle(backgroundColor:)` は `MainActor` 隔離された関数および非 `Sendable` な型を直接操作しているため、単に `MainActor` 隔離を適用するほうが適切かもしれません。
+
+```swift
+@MainActor
+func updateStyle(backgroundColor: ColorComponents) async {
+    applyBackground(backgroundColor)
+}
+```
+
+これで、非 `Sendable` 型が隔離境界を越えてしまうことはなくなりました。
+そしてこのケースでは、問題を解決するだけでなく非同期呼び出しの必要性もなくなりました。
+潜在的な隔離の問題を解決することでAPIをさらに簡略化できる可能性があります。
+
+このような `MainActor` 隔離の不足は、間違いなく、潜在的な隔離の最もありふれたタイプです。
+開発者がこれを解決策として用いることを躊躇するのも非常によくあることです。
+UIを持つプログラムが `MainActor` 隔離された大きな一連の状態を持つことは全く普通のことです。
+_非同期_ 作業の長時間実行に関する懸念は、対象を絞ったわずかな `nonisolated` 関数により対処できることがよくあります。
+
+### 計算型の値
+
+境界を越えて非 `Sendable` 型を渡そうとする代わりに、必要な値を生成する `Sendable` 関数を使うことができるかもしれません。
+
+```swift
+func updateStyle(backgroundColorProvider: @Sendable () -> ColorComponents) async {
+    await applyBackground(using: backgroundColorProvider)
+}
+```
+
+ここでは `ColorComponents` が　`Sendable` でないことは問題になりません。
+その値を計算可能な `@Sendable` 関数を使用することで、送信可能性の不足を完全に回避できます。
+
+### 引数の送り出し
+
+安全に実行できると証明できれば、コンパイラは非 `Sendable` な値が隔離境界を越えることを許可します。
+それが必要だと明示的に宣言した関数は、より少ない制限のもと実装のなかで値を使用できます。
+
+```swift
+func updateStyle(backgroundColor: sending ColorComponents) async {
+    // この境界横断はあらゆるケースで安全だと証明可能である
+    await applyBackground(backgroundColor)
+}
+```
+
+`sending` 引数により呼び出し元にいくつかの制限がかかります。
+しかし、これは `Sendable` に準拠するよりも依然としてより簡単で適切です。
+このテクニックは自分で管理していない型に対しても有効です。
+
+### Sendableへの準拠
+
+隔離ドメインの横断に関する問題に遭遇したときに、 `Sendable` への準拠を追加しようとすることはごく自然な反応です。
+型を `Sendable` にする方法は4つあります。
+
+#### グローバル隔離
+
+任意の型にグローバル隔離を追加すると自動的に `Sendable` になります。
+
+```swift
+@MainActor
+public struct ColorComponents {
+    // ...
+}
+```
+
+この型を `MainActor` に隔離したため、他の隔離ドメインからのアクセスは非同期に行なわなければなりません。
+これによりドメイン間でインスタンスを安全に渡すことが可能になります。
+
+#### アクター
+
+アクターはプロパティがアクター隔離によって保護されるため暗黙的に `Sendable` へ準拠します。
+
+```swift
+actor Style {
+    private var background: ColorComponents
+}
+```
+
+`Sendable` への準拠を得ることに加えて、アクターは独自の隔離ドメインを持ちます。
+これによりアクターは内部で他の非 `Sendable` 型を自由に扱うことができます。
+これは大きな利点ですがトレードオフもあります。
+
+アクターの隔離されたメソッドはすべて非同期でなければならないので、その型にアクセスする場所は非同期のコンテキストを必要とするかもしれません。
+それだけでもこのような変更を慎重に行なう理由になります。
+しかしさらに、アクターに入出力されるデータ自体が隔離境界を越える必要が出てくるかもしれません。
+その結果さらに多くの `Sendable` 型が必要になる可能性があります。
+
+```swift
+actor Style {
+    private var background: ColorComponents
+
+    func applyBackground(_ color: ColorComponents) {
+        // ここで非Sendableなデータを使用する
+    }
+}
+```
+
+非Sendableなデータ _および_ データに対する操作の両方をアクター内に移動することで、越えなければならない隔離境界がなくなります。
+こうすることで、どの非同期コンテキストからも自由にアクセス可能であるような `Sendable` インターフェースが操作に対して提供されます。
+
+#### 手動での同期
+
+すでに手動で同期をとっている型があるなら、 `Sendable` への準拠に `unchecked` とつけることでそのことをコンパイラに示すことができます。
+
+```swift
+class Style: @unchecked Sendable {
+    private var background: ColorComponents
+    private let queue: DispatchQueue
+}
+```
+
+Swiftの並行処理システムと統合するためにキューやロックあるいはその他の手動による同期の方式の使用をやめるよう強いられたと感じるべきではありません。
+しかし、ほとんどの型は本質的にスレッド安全ではありません。
+一般的なルールとして、もし型がまだスレッド安全でないなら、最初のアプローチとして型を `Sendable` にしようとするべきではありません。
+最初に他のテクニックを試し、本当に必要なときのみ手動での同期に戻ってくるほうが簡単なことが多いです。
+
+#### Sendableへの遡及的な準拠
+
+依存先が手動による同期を用いた型を公開している場合もあります。
+普通これはドキュメントを通してのみ見ることができます。
+このケースでも `@unchecked Sendable` 準拠を追加できます。
+
+```swift
+extension ColorComponents: @retroactive @unchecked Sendable {
+}
+```
+
+`Sendable` はマーカープロトコルなので、遡及的な準拠はバイナリの互換性の問題に直接影響しません。
+しかし細心の注意を払って使用する必要があります。
+手動での同期を用いる型には、 `Sendable` のセマンティクスと完全に一致しないような安全性への条件や例外が存在する可能性があります。
+さらに、システムの公開APIの一部であるような型にこのテクニックを使用する場合には _特に_ 注意する必要があります。
+
+> Note: 遡及的な準拠についての詳細は、関連する[Swift evolutionのプロポーザル][SE-0364]を参照してください。
+
+[SE-0364]: https://github.com/swiftlang/swift-evolution/blob/main/proposals/0364-retroactive-conformance-warning.md
+
+#### Sendableな参照型
+
+`unchecked` 修飾子なしに参照型を `Sendable` として有効にできますが、これは非常に限られた状況下でのみ可能です。
+
+確認された `Sendable` 準拠を可能にするためには、クラスは
+
+- `final` でなければなりません
+- `NSObject` 以外のクラスを継承してはいけません
+- 非隔離の可変なプロパティを持ってはいけません
+
+```swift
+public struct ColorComponents: Sendable {
+    // ...
+}
+
+final class Style: Sendable {
+    private let background: ColorComponents
+}
+```
+
+`Sendable` に準拠する参照型は、値型が望ましいことの表れであることがあります。
+しかし、参照セマンティクスを保持しなければならない場面やSwift/Objective-Cが混在するコードベースが必要な場面があります。
+
+#### 組み合わせの使用
+
+参照型を `Sendable` にするためのテクニックを1つだけ選ぶ必要はありません。
+1つの型の内部で多くのテクニックを使うことができます。
+
+```swift
+final class Style: Sendable {
+    private nonisolated(unsafe) var background: ColorComponents
+    private let queue: DispatchQueue
+
+    @MainActor
+    private var foreground: ColorComponents
+}
+```
+
+`foreground` プロパティがアクター隔離を使う一方で、 `background` プロパティは手動による同期で保護されています。
+これら2つのテクニックを組み合わせることで、内部的なセマンティクスをより良く表現した型になります。
+またこのようにすることで、型はコンパイラによる自動化された隔離確認を引き続き活用できます。
+
+### 非隔離の初期化
+
+アクター隔離された型が非隔離のコンテキストで初期化されたときに問題が発生することがあります。
+
+これは、型がデフォルト値の式の中やプロパティのイニシャライザとして使用される場合に頻繁に発生します。
+
+> Note: これらの問題は[latent isolation](#Latent-Isolation)や[under-specified protocol](#Under-Specified-Protocol)の兆候である可能性があります。
+
+ここでは非隔離の `Stylers` 型が `MainActor` 隔離されているイニシャライザを呼び出しています。
+
+```swift
+@MainActor
+class WindowStyler {
+    init() {
+    }
+}
+
+struct Stylers {
+    static let window = WindowStyler()
+}
+```
+
+このコードは次のようなエラーになります。
+
+```
+ 7 | 
+ 8 | struct Stylers {
+ 9 |     static let window = WindowStyler()
+   |                `- error: main actor-isolated default value in a nonisolated context
+10 | }
+11 | 
+```
+
+グローバルに隔離された型は、実際にはイニシャライザでどのグローバルアクターの状態も参照する必要がないことがあります。
+`init` メソッドを `nonisolated` にすることで、どのような隔離ドメインからも自由に呼び出せます。
+これは、任意の *隔離された* 状態が `MainActor` からのみアクセス可能であるとコンパイラが保証しているため安全なままです。
+
+```swift
+@MainActor
+class WindowStyler {
+    private var viewStyler = ViewStyler()
+    private var primaryStyleName: String
+
+    nonisolated init(name: String) {
+        self.primaryStyleName = name
+        // 型はここで完全に初期化される
+    }
+}
+```
+
+すべての `Sendable` なプロパティはこの `init` メソッドのなかで依然として安全にアクセスできます。
+また、 非 `Sendable` なプロパティは初期化できないもののデフォルト式を使えば初期化できます。
+
+### 隔離されていないデイニシャライゼーション
+
+アクター隔離を持つ型であっても、デイニシャライザは _常に_ 非隔離です。
+
+```swift
+actor BackgroundStyler {
+    // もう1つのアクター隔離された型
+    private let store = StyleStore()
+
+    deinit {
+        // ここは非隔離
+        store.stopNotifications()
+    }
+}
+```
+
+このコードは次のエラーを発生させます：
+
+```
+error: call to actor-isolated instance method 'stopNotifications()' in a synchronous nonisolated context
+ 5 |     deinit {
+ 6 |         // this is non-isolated
+ 7 |         store.stopNotifications()
+   |               `- error: call to actor-isolated instance method 'stopNotifications()' in a synchronous nonisolated context
+ 8 |     }
+ 9 | }
+```
+
+この型がアクターであるために意外に感じるかもしれませんが、これは新しい制約ではありません。
+デイニシャライザを実行するスレッドが保証されたことはなく、Swiftのデータ隔離が今その事実を表面化させただけです。
+
+多くの場合、 `deinit` 内で行なわれる作業が同期的である必要はありません。
+解決策は、構造化されていない `Task` を使用し、隔離された値をキャプチャしたのちに操作することです。
+このテクニックを使用する際は、暗黙的にでも `self` をキャプチャしないようにすることが _重要_ です。
+
+```swift
+actor BackgroundStyler {
+    // もう1つのアクター隔離された型
+    private let store = StyleStore()
+
+    deinit {
+        // ここはアクター隔離されていないのでタスクが引き継ぐものはない
+        Task { [store] in
+            await store.stopNotifications()
+        }
+    }
+}
+```
+
+> Important: `deinit` 内から `self` のライフタイムを延長 **しないで** ください。実行時にクラッシュします。

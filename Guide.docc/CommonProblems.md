@@ -22,7 +22,7 @@ Swift 6言語モードを有効にすると、これらの潜在的な問題の�
 この可視性により、グローバルな状態は特に同時アクセスの影響を受けやすくなります。
 データ競合の安全性が確立される以前の環境でグローバル変数へアクセスする際は、プログラマーはコンパイラのサポートなしに自分で工夫してデータ競合を避けていました。
 
-> Experiment: これらのコード例をパッケージの形式で提供しています。[Globals.swift][Globals]で試してみてください。
+> 検証: これらのコード例をパッケージの形式で提供しています。[Globals.swift][Globals]で試してみてください。
 
 [Globals]: https://github.com/apple/swift-migration-guide/blob/main/Sources/Examples/Globals.swift
 
@@ -131,7 +131,7 @@ class StyleStore {
 この種の問題に対してはさまざまな解決策が考えられますが、トレードオフを伴うことが多いです。
 適切なアプローチを選ぶには、まず、そもそも _なぜ_ 不一致が発生するのかを理解する必要があります。
 
-> Experiment: これらのコード例をパッケージの形式で提供しています。
+> 検証: これらのコード例をパッケージの形式で提供しています。
 [ConformanceMismatches.swift][ConformanceMismatches]で試してみてください。
 
 [ConformanceMismatches]: https://github.com/apple/swift-migration-guide/blob/main/Sources/Examples/ConformanceMismatches.swift
@@ -268,7 +268,7 @@ class WindowStyler: @preconcurrency Styler {
 
 これは、準拠するクラスの静的隔離が常に強制されることを保証するための実行時確認を挿入します。
 
-> Note: 段階的な導入と動的隔離の詳細については[動的隔離][]を参照してください。
+> 注記: 段階的な導入と動的隔離の詳細については[動的隔離][]を参照してください。
 
 [動的隔離]: incrementaladoption#Dynamic-Isolation
 
@@ -335,7 +335,7 @@ extension CustomWindowStyle: Styler {
 隔離境界を越える可能性のあるコンテキストでこの要件を満たさない値を使うことはごくありふれた問題です。
 そして、ライブラリやフレームワークはSwiftの並行処理機能を使うためにアップデートされる可能性があるため、自分のコードを変更していなくてもこれらの問題が発生する可能性があります。
 
-> Experiment: これらのコード例をパッケージの形式で提供しています。[Boundaries.swift][Boundaries]で試してみてください。
+> 検証: これらのコード例をパッケージの形式で提供しています。[Boundaries.swift][Boundaries]で試してみてください。
 
 [Boundaries]: https://github.com/apple/swift-migration-guide/blob/main/Sources/Examples/Boundaries.swift
 
@@ -557,7 +557,7 @@ extension ColorComponents: @retroactive @unchecked Sendable {
 手動での同期を用いる型には、 `Sendable` のセマンティクスと完全に一致しないような安全性への条件や例外が存在する可能性があります。
 さらに、システムの公開APIの一部であるような型にこのテクニックを使用する場合には _特に_ 注意する必要があります。
 
-> Note: 遡及的な準拠についての詳細は、関連する[Swift evolutionのプロポーザル][SE-0364]を参照してください。
+> 注記: 遡及的な準拠についての詳細は、関連する[Swift evolutionのプロポーザル][SE-0364]を参照してください。
 
 [SE-0364]: https://github.com/swiftlang/swift-evolution/blob/main/proposals/0364-retroactive-conformance-warning.md
 
@@ -609,7 +609,7 @@ final class Style: Sendable {
 
 これは、型がデフォルト値の式の中やプロパティの初期化で使用される場合に頻繁に発生します。
 
-> Note: これらの問題は[latent isolation](#Latent-Isolation)や[under-specified protocol](#Under-Specified-Protocol)の兆候である可能性があります。
+> 注記: これらの問題は[latent isolation](#Latent-Isolation)や[under-specified protocol](#Under-Specified-Protocol)の兆候である可能性があります。
 
 ここでは非隔離の `Stylers` 型が `MainActor` 隔離されているイニシャライザを呼び出しています。
 
@@ -705,4 +705,4 @@ actor BackgroundStyler {
 }
 ```
 
-> Important: `deinit` 内から `self` のライフタイムを延長 **しないで** ください。実行時にクラッシュします。
+> 重要: `deinit` 内から `self` のライフタイムを延長 **しないで** ください。実行時にクラッシュします。

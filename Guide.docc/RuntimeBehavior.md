@@ -1,7 +1,12 @@
-# Runtime Behavior
+# 実行時の動作
 
 
 Swift concurrencyの挙動が、あなたが慣れ親しんでいる他のランタイムとどのように異なるかを学び、実行時の挙動という観点で同様の最終結果を達成するための一般的なパターンに慣れましょう。
+
+|原文|[https://www.swift.org/migration/documentation/swift-6-concurrency-migration-guide/runtimebehavior](https://www.swift.org/migration/documentation/swift-6-concurrency-migration-guide/runtimebehavior)|
+|---|---|
+|更新日|2024/7/14(翻訳を最後に更新した日付)|
+|ここまで反映|[https://github.com/apple/swift-migration-guide/commit/96249774f73d9db641c1b6daaf2894eb9dbfc63b](https://github.com/apple/swift-migration-guide/commit/96249774f73d9db641c1b6daaf2894eb9dbfc63b)|
 
 Swiftの並行処理モデルは、async/await、アクター、およびタスクに強く焦点を当てているため、他のライブラリや並行処理ランタイムからのいくつかのパターンは、この新しいモデルに直接変換されるわけではありません。
 この章では、注意すべき一般的なパターンやランタイムの挙動の違いを探り、それらに対処しながらコードをSwiftの並行処理に移行する方法を探っていきましょう。
@@ -9,7 +14,7 @@ Swiftの並行処理モデルは、async/await、アクター、およびタス�
 ## タスクグループを利用する場合の並行処理の注意点
 
 時々、処理するべき大量の作業リストを抱えていることがあるかもしれません。
-次のようにそれら_すべて_の作業項目をタスクグループに追加することは、可能といえば可能です。
+次のようにそれら"すべて"の作業項目をタスクグループに追加することは、可能といえば可能です。
 
 ```swift
 // 無駄が多い処理かも -- おそらく、このコードは数千のタスクを同時並列的に作成します（？！）

@@ -2,10 +2,10 @@
 
 プロジェクトのSwift 6言語モードへの移行を始めましょう。
 
-|原文|https://www.swift.org/migration/documentation/swift-6-concurrency-migration-guide/migrationstrategy|
+|原文|[https://www.swift.org/migration/documentation/swift-6-concurrency-migration-guide/migrationstrategy](https://www.swift.org/migration/documentation/swift-6-concurrency-migration-guide/migrationstrategy)|
 |---|---|
 |更新日|2024/6/20(翻訳を最後に更新した日付)|
-|ここまで反映|https://github.com/apple/swift-migration-guide/commit/40b11e0f54b6d35345d005511e013c230a520d26|
+|ここまで反映|[https://github.com/apple/swift-migration-guide/commit/40b11e0f54b6d35345d005511e013c230a520d26](https://github.com/apple/swift-migration-guide/commit/40b11e0f54b6d35345d005511e013c230a520d26)|
 
 モジュールで完全な並行性の確認を有効にすると、コンパイラによって報告されるデータ競合安全性の問題が大量に発生する可能性があります。数百、場合によっては数千の警告は珍しくありません。そのような膨大な問題に直面したとき、特にSwiftのデータ隔離モデルについて学び始めたばかりであった場合、これは難しすぎると感じるかもしれません。
 
@@ -30,7 +30,10 @@
 
 プロジェクトの最も外側にある最上位モジュールから始める方が簡単な場合があります。このモジュールは、(最も外側で最上位であるという)定義上、他のモジュールから依存されていません。このモジュールへの変更は局所的にしか影響を及ぼさないので、作業量を抑えられます。
 
-しかし、変更はそのモジュールだけで終える**必要はありません**。あなたがコントロールできる、安全でないグローバルな状態や自動で`Sendable`に準拠している型が存在する依存関係は、プロジェクト全体の中の多くの警告の根本原因になる場合があります。多くの場合、これらは最初に焦点を当てると最も効果的です。
+しかし、変更はそのモジュールだけで終える**必要はありません**。あなたがコントロールできる、[安全でないグローバルな状態][Global]や[自動で`Sendable`に準拠している型][Sendable]が存在する依存関係は、プロジェクト全体の中の多くの警告の根本原因になる場合があります。多くの場合、これらは最初に焦点を当てると最も効果的です。
+
+[Global]: <doc:CommonProblems##安全でないグローバルおよび静的変数>
+[Sendable]: <doc:CommonProblems#暗黙的なSendable型>
 
 ## Swift5言語モードを使う
 

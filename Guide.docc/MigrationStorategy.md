@@ -2,10 +2,10 @@
 
 プロジェクトのSwift 6言語モードへの移行を始めましょう。
 
-|原文|https://www.swift.org/migration/documentation/swift-6-concurrency-migration-guide/migrationstrategy|
+|原文|[https://www.swift.org/migration/documentation/swift-6-concurrency-migration-guide/migrationstrategy](https://www.swift.org/migration/documentation/swift-6-concurrency-migration-guide/migrationstrategy)|
 |---|---|
 |更新日|2024/6/20(翻訳を最後に更新した日付)|
-|ここまで反映|https://github.com/apple/swift-migration-guide/commit/40b11e0f54b6d35345d005511e013c230a520d26|
+|ここまで反映|[https://github.com/apple/swift-migration-guide/commit/40b11e0f54b6d35345d005511e013c230a520d26](https://github.com/apple/swift-migration-guide/commit/40b11e0f54b6d35345d005511e013c230a520d26)|
 
 モジュールで完全な並行性の確認を有効にすると、コンパイラによって報告されるデータ競合安全性の問題が大量に発生する可能性があります。数百、場合によっては数千の警告は珍しくありません。そのような膨大な問題に直面したとき、特にSwiftのデータ隔離モデルについて学び始めたばかりであった場合、これは難しすぎると感じるかもしれません。
 

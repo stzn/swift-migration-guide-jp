@@ -4,8 +4,8 @@
 
 |原文|[https://github.com/apple/swift-migration-guide/blob/main/Guide.docc/CommonProblems.md](https://github.com/apple/swift-migration-guide/blob/main/Guide.docc/CommonProblems.md)|
 |---|---|
-|更新日|2024/7/6(翻訳を最後に更新した日付)|
-|ここまで反映|[https://github.com/apple/swift-migration-guide/commit/6487820801552379ffdcb2b166ca0b97c73b697a](https://github.com/apple/swift-migration-guide/commit/6487820801552379ffdcb2b166ca0b97c73b697a)|
+|更新日|2024/7/17(翻訳を最後に更新した日付)|
+|ここまで反映|[https://github.com/apple/swift-migration-guide/commit/c6d956efcddbe2a8888ed6ed77b0a516a53f0d16](https://github.com/apple/swift-migration-guide/commit/c6d956efcddbe2a8888ed6ed77b0a516a53f0d16)|
 
 コンパイラによって保証されるデータ隔離はすべてのSwiftのコードに影響します。
 これにより、完全な並行性の確認は、直接並行処理の言語機能を使用していないSwift 5のコードでも潜在的な問題を浮き彫りにすることがあります。
@@ -76,6 +76,15 @@ var supportedStyleCount = 42
 
 ```swift
 let supportedStyleCount = 42
+```
+
+計算プロパティでもグローバルな値を表現できます。
+そのようなプロパティが一貫して同じ定数値を返すなら、観測可能な値/影響に関する限りでは、これは `let` 定数と意味的に等価です：
+
+```swift
+var supportedStyleCount: Int {
+    42
+}
 ```
 
 もしこの変数を保護するための同期機構があり、それがコンパイラに見えない場合は、`nonisolated(unsafe)` を使って `supportedStyleCount` のすべての隔離確認を無効化できます。

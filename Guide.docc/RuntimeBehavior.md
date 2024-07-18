@@ -13,22 +13,22 @@ Swiftの並行処理モデルは、async/await、アクター、およびタス�
 
 ## タスクグループを利用する場合の並行処理の注意点
 
-時々、処理するべき大量の作業リストを抱えていることがあるかもしれません。
-次のようにそれら"すべて"の作業項目をタスクグループに追加することは、可能といえば可能です。
+処理するべき大量の作業リストを抱えていることもあるかもしれません。
+次のように"すべて"の作業項目をタスクグループに追加することは、可能といえば可能です。
 
 ```swift
-// 無駄が多い処理かも -- おそらく、このコードは数千のタスクを同時並列的に作成します（？！）
+// 無駄が多い処理かも -- おそらく、このコードは数千のタスクを同時並行的に作成する（？！）
 let lotsOfWork: [Work] = ...
 await withTaskGroup(of: Something.self) { group in
   for work in lotsOfWork {
-    // もしもこれが数千の項目であれば、ここで大量のタスクを作成することになるかもしれません。
+    // もしもこれが数千の項目であれば、ここで大量のタスクを作成することになるかもしれない。
     group.addTask {
       await work.work()
     }
   }
 
   for await result in group {
-    process(result) // 必要に応じて、結果を何らかの方法で処理します。
+    process(result) // 必要に応じて、結果を何らかの方法で処理する。
   }
 }
 ```
@@ -54,9 +54,9 @@ await withTaskGroup(of: Something.self) { group in
     }
     
     for await result in group {
-        process(result) // 必要に応じて、結果を何らかの方法で処理します。
+        process(result) // 必要に応じて、結果を何らかの方法で処理する。
     
-        // 結果が返ってくる度に、実行すべき追加の作業があるかどうかを確認し、それを実施しましょう。
+        // 結果が返ってくる度に、実行すべき追加の作業があるかどうかを確認し、それを実施しよう。
         if submittedWork < lotsOfWork.count, 
            let remainingWorkItem = lotsOfWork[submittedWork] {
             group.addTask { // または 'addTaskUnlessCancelled'

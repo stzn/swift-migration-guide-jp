@@ -1,7 +1,7 @@
 # ランタイム時の動作
 
 
-Swift concurrencyのランタイム時の効果が、あなたが慣れ親しんでいる他のランタイムとどのように異なるかを学び、コード実行の効果という観点で同様の最終結果を達成するための一般的なパターンに慣れましょう。
+Swift concurrencyのランタイム時の効果が、あなたが慣れ親しんでいる他のランタイムとどのように異なるかを学び、プログラムの実行の効果という観点で同様の最終結果を達成するための一般的なパターンに慣れましょう。
 
 |原文|[https://www.swift.org/migration/documentation/swift-6-concurrency-migration-guide/runtimebehavior](https://www.swift.org/migration/documentation/swift-6-concurrency-migration-guide/runtimebehavior)|
 |---|---|
@@ -11,7 +11,7 @@ Swift concurrencyのランタイム時の効果が、あなたが慣れ親しん
 Swiftの並行処理モデルは、async/await、アクター、およびタスクに強く焦点を当てているため、他のライブラリや並行処理ランタイムからのいくつかのパターンは、この新しいモデルに直接変換されるわけではありません。
 この章では、注意すべき一般的なパターンやランタイムの挙動の違いを探り、それらに対処しながらコードをSwiftの並行処理に移行する方法を探っていきましょう。
 
-## タスクグループを利用する場合の並行処理の注意点
+## タスクグループを使って同時並行処理数を制限する
 
 処理するべき大量の作業リストを抱えていることもあるかもしれません。
 次のように"すべて"の作業項目をタスクグループに追加することは、可能といえば可能です。
@@ -33,7 +33,7 @@ await withTaskGroup(of: Something.self) { group in
 }
 ```
 
-何百または何千もの項目を扱う予定なら、それらをすぐ、すべてのタスクグループに追加するのは非効率的かもしれません。
+何百または何千もの項目を扱うつもりなら、それらをすべて一気にタスクグループに追加するのは非効率的かもしれません。
 タスクを（`addTask`メソッドで）作成すると、そのタスクを中断して実行するためのメモリが割り当てられます。
 各タスクに必要なメモリの量は大きくありませんが、すぐに実行されない何千ものタスクを作成する場合、そのメモリ量は無視できないものになります。
 
@@ -56,7 +56,7 @@ await withTaskGroup(of: Something.self) { group in
     for await result in group {
         process(result) // 必要に応じて、結果を何らかの方法で処理する。
     
-        // 結果が返ってくる度に、実行すべき追加の作業があるかどうかを確認し、それを実施しよう。
+        // 結果が返ってくる度に、実行すべき追加の作業があるかどうかを確認しよう。
         if submittedWork < lotsOfWork.count, 
            let remainingWorkItem = lotsOfWork[submittedWork] {
             group.addTask { // または 'addTaskUnlessCancelled'

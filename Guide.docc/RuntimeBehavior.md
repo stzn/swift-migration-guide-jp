@@ -1,7 +1,7 @@
 # ランタイム時の動作
 
 
-Swift concurrencyのランタイム時の効果が、あなたが慣れ親しんでいる他のランタイムとどのように異なるかを学び、プログラムの実行の効果という観点で同様の最終結果を達成するための一般的なパターンに慣れましょう。
+Swift concurrencyのランタイムのセマンティクスが、あなたが慣れ親しんでいる他のランタイムとどのように異なるかを学び、プログラム実行のセマンティクスという観点で同様の最終結果を達成するための一般的なパターンに慣れましょう。
 
 |原文|[https://www.swift.org/migration/documentation/swift-6-concurrency-migration-guide/runtimebehavior](https://www.swift.org/migration/documentation/swift-6-concurrency-migration-guide/runtimebehavior)|
 |---|---|

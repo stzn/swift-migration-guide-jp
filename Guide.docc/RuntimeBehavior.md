@@ -9,7 +9,7 @@ Swiftの並行処理のランタイムのセマンティクスが、あなたが
 |ここまで反映|[https://github.com/apple/swift-migration-guide/commit/96249774f73d9db641c1b6daaf2894eb9dbfc63b](https://github.com/apple/swift-migration-guide/commit/96249774f73d9db641c1b6daaf2894eb9dbfc63b)|
 
 Swiftの並行処理モデルは、async/await、アクター、およびタスクに強く焦点を当てているため、他のライブラリや並行処理ランタイムからのいくつかのパターンは、この新しいモデルに直接変換されるわけではありません。
-この章では、注意すべき一般的なパターンやランタイムの挙動の違いを探り、それらに対処しながらコードをSwiftの並行処理に移行する方法を探っていきましょう。
+この章では、注意すべき一般的なパターンやランタイムの挙動の違いを探り、コードをSwiftの並行処理に移行しつつ、それらに対処する方法を探っていきましょう。
 
 ## タスクグループを使って同時並行処理数を制限する
 
@@ -56,7 +56,7 @@ await withTaskGroup(of: Something.self) { group in
     for await result in group {
         process(result) // 必要に応じて、結果を何らかの方法で処理する。
     
-        // 結果が返ってくる度に、実行すべき追加の作業があるかどうかを確認しよう。
+        // 結果が返ってくる度に、実行すべき追加の作業があるかどうかを確認する。
         if submittedWork < lotsOfWork.count, 
            let remainingWorkItem = lotsOfWork[submittedWork] {
             group.addTask { // または 'addTaskUnlessCancelled'

@@ -1,112 +1,54 @@
-# Data Race Safety
+# データ競合安全
 
-Learn about the fundamental concepts Swift uses to enable data-race-free
-concurrent code.
+Swiftの基本的な概念について学び、データ競合のない並行コードを実現する方法を知りましょう。
 
-Traditionally, mutable state had to be manually protected via careful runtime
-synchronization.
-Using tools such as locks and queues, the prevention of data races was
-entirely up to the programmer. This is notoriously difficult
-not just to do correctly, but also to keep correct over time.
-Even determining the _need_ for synchronization may be challenging.
-Worst of all, unsafe code does not guarantee failure at runtime.
-This code can often frequently seem to work, possibly requiring highly unusual
-conditions to exhibit the incorrect and unpredictable behavior characteristic
-of a data race.
+|原文|[https://www.swift.org/migration/documentation/swift-6-concurrency-migration-guide/dataracesafety](https://www.swift.org/migration/documentation/swift-6-concurrency-migration-guide/dataracesafety)|
+|---|---|
+|更新日|2024/7/24(翻訳を最後に更新した日付)|
+|ここまで反映|https://github.com/apple/swift-migration-guide/commit/24e31ffc589fefb42f08877878e689eb29b1644b|
 
-More formally, a data race occurs when one thread accesses memory while the
-same memory is being mutated by another thread.
-The Swift 6 language mode eliminates these problems by preventing data races
-at compile time.
+従来、可変状態(mutable state)は、細心の注意を払い、ランタイム時の同期によって手動で保護する必要がありました。つまり、ロックやキューなどのツールを使用してデータ競合を防ぐのは、完全にプログラマー任せだということです。これは、正しく実行するだけでなく、ずっと正しく実行し続けることも非常に難しくあります。同期が必要かどうかを判断することさえも難しいかもしれません。最悪の状況は、安全でないコードがランタイム時にチェックされることが保証されないことです。このコードは、多くの場合正しく動いているように見えますが、それはおそらく、データ競合の特徴である間違った予測不可能な挙動が表面化するのに、かなり特殊な条件が必要にだからでしょう。
 
-> Important: You may have encountered constructs like `async`/`await`
-and actors in other languages. Pay extra attention, as similarities to
-these concepts in Swift may only be superficial.
+より正確にいうと、データ競合は、あるスレッドがメモリにアクセスしている際に、別のスレッドが同じメモリを変更することで発生します。Swift6言語モードでは、コンパイル時にデータ競合を防ぐことによってこれらの問題を排除します。
 
-## Data Isolation
+> 重要: 他の言語で `async`/`await` やアクターのような構造に遭遇したことがあるかもしれません。Swiftにおけるこれらの概念との類似性は表面的なものでしかない可能性があるため、特に注意してください。
 
-Swift's concurrency system allows the compiler to understand and verify the
-safety of all mutable state.
-It does this with a mechanism called _data isolation_.
-Data isolation guarantees mutually exclusive
-access to mutable state. It is a form of synchronization,
-conceptually similar to a lock.
-But unlike a lock, the protection data isolation provides happens at
-compile-time.
+## データ隔離
 
-A Swift programmer interacts with data isolation in two ways:
-statically and dynamically.
+Swiftの並行処理システムは、コンパイラがすべての可変状態の安全性を理解し、検証できるようにしています。これは、*データ隔離*と呼ばれる仕組みで行なわれているものです。データ隔離は、可変状態への相互排他的なアクセスを保証します。これは同期メカニズムの1つの形で、概念的にはロックに似ています。しかし、ロックとは異なり、データ隔離が提供する保護は以下の場所で起こります。
 
-The term _static_ is used to describe program elements that are unaffected by
-runtime state. These elements, such as a function definition,
-are made up of keywords and annotations. Swift's concurrency system is 
-an extension of its type system. When you declare functions and types,
-you are doing so statically. Isolation can be a part of these static
-declarations.
+Swiftプログラマーは、静的と動的という2つの方法でデータを隔離します：
 
-There are cases, however, where the type system alone cannot sufficiently
-describe a system's behavior. An example could be an Objective-C type
-that has been exposed to Swift. This declaration, made outside of Swift code,
-may not provide enough information to the compiler to ensure safe usage. To
-accommodate these situations, there are additional features that allow you
-to express isolation requirements dynamically.
+*静的*という用語は、ランタイム時の状態に影響されないプログラム要素を記述するために使用されます。関数定義のようなこれらの要素は、キーワードとアノテーションで構成されます。Swiftの並行処理システムは、型システムを拡張したものです。関数と型を宣言するときは、静的に行なっています。データ隔離は、これらの静的宣言の一部である場合があります。
 
-Data isolation, be it static or dynamic, allows the
-compiler to guarantee Swift code you write is free of data races.
+ただし、型システムだけでは、ランタイム時の挙動を十分に説明できない場合があります。たとえば、Swiftに公開されているObjective-Cの型です。Swiftコードの外部で行なわれたこの宣言は、安全な使用を保証するためにコンパイラに十分な情報が提供されない場合があります。このような状況に対応するために、データ隔離の要件を動的に表現できる追加機能があります。
 
-### Isolation Domains
+データ隔離によって、コンパイラは、(静的であれ動的であれ)あなたの書いたSwiftコードにデータ競合がないことを保証できます。
 
-Data isolation is the _mechanism_ used to protect shared mutable state.
-But, it is often useful to talk about an independent unit of isolation.
-This is known as an _isolation domain_.
-How much state a particular domain is responsible for
-protecting can vary widely. Isolation domains can contain a single variable.
-Or, they could protect entire subsystems, like an complete user interface.
+> 注記: 動的な隔離についての詳細は、<doc:IncrementalAdoption#Dynamic-Isolation>を参照してください。
 
-The critical feature of an isolation domain is the safety it provides.
-Mutable state can only be accessed from one isolation domain at a time.
-You can pass mutable state from one isolation domain to another, but you can
-never access that state concurrently from a different domain.
-This guarantee is validated by the compiler.
+### 隔離ドメイン
 
-Even if you have not explicitly defined it yourself,
-_all_ function and variable declarations have a well-defined static
-isolation domain.
-These domains will always fall into one of three categories:
+データの隔離は、共有可変状態(shared mutable state)を保護するための*仕組み*です。ですが、個々の隔離について話すと役に立つことがよくあります。これは*隔離ドメイン*と呼ばれています。つまり、特定のドメインが保護する状態の範囲のことです。隔離ドメインは、単一の変数を保護することも、ユーザーインターフェースのようなサブシステム全体を保護することもあります。
 
-1. Non-isolated
-2. Isolated to an actor value
-3. Isolated to a global actor
+隔離ドメインの重要な特徴は、それが提供する安全性です。可変状態は、一度に1つの隔離ドメインからのみアクセスできます。ある隔離ドメインから別の隔離ドメインに可変状態を渡すことはできますが、別のドメインからその状態に同時にアクセスすることは決してできません。コンパイラがこれが保証されているかを検証します。
 
-### Non-isolated
+たとえ自分で明示的に定義していなくても、すべての関数や変数の宣言には、明確に定義された静的な隔離ドメインが存在します。これらのドメインは常に次の3つのカテゴリのうちの1つに分類されます。
 
-Functions and variables do not have to be a part of an explicit isolation
-domain.
-In fact, a lack of isolation is the default, called _non-isolated_.
-This absence of isolation behaves just like a domain all to itself.
-Because all the data isolation rules apply,
-there is no way for non-isolated code to mutate state protected in another
-domain.
+1. 非隔離(Non-isolated)
+2. アクターに隔離されている
+3. グローバルアクターに隔離されている
 
-<!--
-  REFERENCE
-  "Sea", in the context of concurrency, is a reference to the WWDC 2022 session
-  "Eliminate data races using Swift Concurrency".
+### 非隔離(Non-isolated)
 
-  Types like Island, Chicken, and Pineapple are also featured in that video.
-
-  https://developer.apple.com/wwdc22/110351
--->
+関数や変数は、明示的な隔離ドメインの一部である必要はありません。実際、隔離されていないのがデフォルトで、*非隔離(non-isolated)*と呼ばれます。つまり、すべてのデータ隔離のルールが適用されるため、非隔離のコードが別のドメインで保護されている状態を変更できないということです。
 
 ```swift
 func sailTheSea() {
 }
 ```
 
-This top-level function which has no static isolation, making it non-isolated.
-It can safely call other non-isolated functions and access non-isolated
-variables.
-But, it cannot access anything from another isolation domain.
+このトップレベル関数は、静的に隔離されていないため非隔離になります。他の非隔離の関数を呼び出したり、非隔離の変数にアクセスしたりは安全にできますが、他の隔離ドメインに存在するものには一切アクセスできません。
 
 ```swift
 class Chicken {
@@ -115,22 +57,13 @@ class Chicken {
 }
 ```
 
-This is an example of a non-isolated type.
-Inheritance can play a role in static isolation.
-But, this simple class, with no superclass or protocol conformances,
-also uses the default isolation.
+これは非隔離型の例です。継承は静的な隔離も引き継ぎます。しかし、スーパークラスもプロトコル準拠もないため、この単純なクラスは、デフォルトの隔離を使用しています。
 
-Data isolation guarantees that non-isolated entities cannot access the mutable
-state from other domains.
-As a result of this, non-isolated functions and variables are always safe to
-access from any other domain.
+データ隔離は、非隔離のものが他のドメインの可変状態にアクセスできないことを保証します。逆に言うと、非隔離の関数や変数は、他のドメインからアクセスしても常に安全だということです。
 
-### Actors
+### アクター
 
-Actors give the programmer a way to define an isolation domain,
-along with methods that operate within that domain.
-All stored instance properties of an actor are isolated to the enclosing
-actor instance.
+アクターは、プログラマーにそのドメイン内で動作するメソッドとともに隔離ドメインを定義する方法を提供します。アクターの格納プロパティはすべて、それらを囲むアクターインスタンスに隔離されます。
 
 ```swift
 actor Island {
@@ -143,16 +76,9 @@ actor Island {
 }
 ```
 
-Here, every `Island` instance will define a new domain,
-which will be used to protect access to its properties.
-The method `Island.addToFlock` is said to be isolated to `self`.
-The body of a method has access to all data that shares its isolation domain,
-making the `flock` property synchronously accessible.
+ここで、すべての`Island`インスタンスは、そこに属するプロパティへのアクセスを保護するために新しいドメインを定義します。これは、メソッド`Island.addToFlock`が`self`に隔離されていると言います。メソッド本体は、その隔離ドメインを共有するすべてのデータにアクセスでき、`flock`プロパティに同期的にアクセスできます。
 
-Actor isolation can be selectively disabled.
-This can be useful any time you want to keep code organized within an
-isolated type, but opt-out of the isolation requirements that go along with it.
-Non-isolated methods cannot synchronously access any protected state.
+アクターの隔離は、選択的に無効にできます。これは、隔離されている型のなかにコードを書きたい一方で、それに伴う隔離の要件は避けたい場合に便利です。非隔離メソッドは、その隔離ドメインに保護された状態へは同期的にアクセスできません。
 
 ```swift
 actor Island {
@@ -160,14 +86,13 @@ actor Island {
     var food: [Pineapple]
 
     nonisolated func canGrow() -> PlantSpecies {
-        // neither flock nor food are accessible here
+        // ここではflockにもfoodにもアクセスできない。
     }
 }
 ```
 
-The isolation domain of an actor is not limited to its own methods.
-Functions that accept an isolated parameter can also gain access to
-actor-isolated state without the need for any other form of synchronization.
+アクターの隔離ドメインは、それ自身のメソッドに限られてはいません。隔離された(isolated)パラメータを受け取る関数は、他の形式の同期を必要とせずに、アクターによって隔離された状態にアクセスできるようにします。
+
 
 ```swift
 func addToFlock(of island: isolated Island) {
@@ -175,18 +100,13 @@ func addToFlock(of island: isolated Island) {
 }
 ```
 
-> Note: For an overview of actors, please see the [Actors][] section of
-The Swift Programming Language.
+> 注記: アクターの概要については、The Swift Programming Language の [Actors][] セクションを参照してください。
 
 [Actors]: https://docs.swift.org/swift-book/documentation/the-swift-programming-language/concurrency#Actors
 
-### Global Actors
+### グローバルアクター
 
-Global actors share all of the properties of regular actors, but also provide
-a means of statically assigning declarations to their isolation domain.
-This is done with an annotation matching the actor name.
-Global actors are particularly useful when groups of types all need to
-interoperate as a single pool of shared mutable state.
+グローバルアクターは、通常のアクターが有するすべて特性を持ちますが、宣言をグローバルアクターの隔離ドメインへ静的に割り当てる手段も提供します。これは、アクター名と一致するアノテーションをつけることによって行なわれます。グローバルアクターは、一連の型をすべて単一の隔離ドメインに属する共有可変状態の集まりとして相互運用する必要がある場合に、特に有用です。
 
 ```swift
 @MainActor
@@ -196,13 +116,9 @@ class ChickenValley {
 }
 ```
 
-This class is statically-isolated to `MainActor`. This ensures that all access
-to its mutable state is done from that isolation domain.
+このクラスは`MainActor`に静的に隔離されています。これにより、このクラスの可変状態へのすべてのアクセスが`MainActor`から行なわれるようになります。
 
-You can opt-out of this type of actor isolation as well,
-using the `nonisolated` keyword.
-And just as with actor types,
-doing so will disallow access to any protected state.
+`nonisolated`キーワードを使用することで、この型のアクターの隔離をオプトアウトできます。そして、他のアクターと同様に非隔離にすることで、グローバルアクターに保護された状態へのアクセスはできなくなります。
 
 ```swift
 @MainActor
@@ -211,25 +127,14 @@ class ChickenValley {
     var food: [Pineapple]
 
     nonisolated func canGrow() -> PlantSpecies {
-        // neither flock, food, nor any other MainActor-isolated
-        // state is accessible here
+        // flock、food、その他のMainActorに隔離された状態にはアクセスできない
     }
 }
 ```
 
-### Tasks
+### タスク
 
-A `task` is a unit of work that can run concurrently within your program.
-You cannot run concurrent code in Swift outside of a task,
-but that doesn't mean you must always manually start one.
-Typically, asynchronous functions do not need to be aware of the
-task running them.
-In fact, tasks can often begin at a much higher level,
-within an application framework, or even at the root of a program.
-
-Tasks may run concurrently with one another,
-but each individual task only executes one function at a time.
-They run code in order, from beginning to end.
+タスクは、プログラム内で並行して実行できる作業の単位です。タスクの外側でSwiftは並行コードを実行できませんが、それは常に手動で開始しなければならないということではありません。一般的に、非同期関数は、それを実行しているタスクを認識する必要はありません。実際、タスクは、多くの場合、アプリケーションフレームワーク内、あるいはプログラムのエントリーポイントといった、より高レベルで開始できます。
 
 ```swift
 Task {
@@ -237,33 +142,21 @@ Task {
 }
 ```
 
-A task always has an isolation domain. They can be isolated to an
-actor instance, a global actor, or could be non-isolated.
-This isolation can be established manually, but can also be inherited
-automatically based on context.
-Task isolation, just like all other Swift code, determines what mutable state
-they can access.
+タスクは、常にある隔離ドメインのなかで実行されます。あるアクターインスタンスやグローバルアクターに隔離されることもあれば、非隔離の場合もあります。この隔離は手動で構築できますが、コンテキストに基づいて自動的に継承される場合もあります。タスクの隔離は、他のすべてのSwiftコードと同様に、タスクがアクセスできる可変状態を決定します。
 
-Tasks can run both synchronous and asynchronous code. But, regardless of the
-structure and how many tasks are involved, functions in the same isolation
-domain cannot run concurrently with each other.
-There will only ever be one task running synchronous code for any given
-isolation domain.
+タスクは同期と非同期両方のコードを実行できます。しかし、構造やタスクの数に関係なく、同じ隔離ドメイン内の関数は、お互いに同時には実行できません。任意の隔離ドメインで同期コードを実行するタスクは、一度にたった1つだけです。
 
-> Note: For more information see the [Tasks][] section of
-The Swift Programming Language.
+> 注記: より詳細はThe Swift Programming Languageの[Tasks][]セクションを参照してください。
 
 [Tasks]: https://docs.swift.org/swift-book/documentation/the-swift-programming-language/concurrency#Tasks-and-Task-Groups
 
-### Isolation Inheritance
+### 隔離の推論と継承
 
-There are many ways to specify isolation explicitly.
-But, there are cases where the context of a declaration will establish isolation
-implicitly, via _isolation inheritance_.
+隔離を明示的に指定する方法はたくさんあります。しかし、宣言のコンテキストが*隔離の継承*によって暗黙的に隔離ドメインを構築することがあります。
 
-#### Classes
+#### クラス
 
-A subclass will always inherit the isolation of its parent.
+サブクラスは常に親クラスと同じ隔離を持ちます。
 
 ```swift
 @MainActor
@@ -274,20 +167,15 @@ class Chicken: Animal {
 }
 ```
 
-Because `Chicken` inherits from `Animal`, the static isolation of the `Animal`
-type also implicitly applies.
-Not only that, it also cannot be changed by a subclass.
-All `Animal` instances have been declared to be MainActor-isolated, which
-means all `Chicken` instances must be as well.
+`Chicken`は`Animal`を継承しているため、`Animal`型の静的な隔離も暗黙的に適用されます。それだけではなく、その隔離はサブクラスから変更できません。つまり、すべての`Animal`インスタンスは`MainActor`に隔離されており、すべての`Chicken`インスタンスも同様に、`MainActor`に隔離されているということです。
 
-The static isolation of a type will also be inherited by its properties and 
-methods by default.
+型の静的な隔離は、そのプロパティとメソッドに対してもデフォルトで推論されます。
 
 ```swift
 @MainActor
 class Animal {
-    // all declarations within this type are also
-    // implicitly MainActor-isolated
+    // この型の中のすべての宣言が
+    // 暗黙的に`MainActor`に隔離されている
     let name: String
 
     func eat(food: Pineapple) {
@@ -295,15 +183,13 @@ class Animal {
 }
 ```
 
-> Note: For more information, see the [Inheritance][] section of
-The Swift Programming Language.
+> 注記: より詳細については、The Swift Programming Languageの[Inheritance][]セクションを参照してください。
 
 [Inheritance]: https://docs.swift.org/swift-book/documentation/the-swift-programming-language/inheritance
 
-#### Protocols
+#### プロトコル
 
-A protocol conformance can implicitly affect isolation via inheritance.
-However, the protocol's effect on isolation depends on where its conformance is applied.
+プロトコルへの準拠は、暗黙的な隔離に影響を与えます。しかし、プロトコルが隔離に与える影響範囲は、その準拠が適用される場所に依ります。
 
 ```swift
 @MainActor
@@ -311,18 +197,16 @@ protocol Feedable {
     func eat(food: Pineapple)
 }
 
-// inherited isolation applies to the entire type
+// 推論された隔離は型全体に適用される
 class Chicken: Feedable {
 }
 
-// inherited isolation only applies within the extension
+// 推論された隔離は、このextensionの中のみに適用される
 extension Pirate: Feedable {
 }
 ```
 
-A protocol's requirements themselves can also be isolated.
-This can offer more fine-grained control around how conforming types inherit
-isolation.
+プロトコルの要件そのものも隔離できます。これにより、準拠する型に対する隔離がどのように推論されるかをより細かく制御できます。
 
 ```swift
 protocol Feedable {
@@ -331,89 +215,44 @@ protocol Feedable {
 }
 ```
 
-Regardless of how a protocol is defined and conformance added, you cannot alter
-other mechanisms of static isolation.
-If a type is globally-isolated, either explicitly or via inheritance from a 
-superclass, a protocol conformance cannot be used to change it.
+プロトコルがどのように定義されたか、そしてそのプロトコルへの準拠がどう追加されたかに関わらず、静的な隔離の他のメカニズムを変更できません。つまり、ある型が明示的に、あるいはスーパークラスからの推論によってグローバルに隔離されている場合、プロトコル準拠を使ってもそれを変更できないということです。
 
-> Note: For more information, see the [Protocols][] section of
-The Swift Programming Language.
+> 注記: より詳細については、The Swift Programming Languageの[Protocols][]セクションを参照してください。
 
 [Protocols]: https://docs.swift.org/swift-book/documentation/the-swift-programming-language/protocols
 
-#### Function Types
+#### 関数型
 
-Isolation inheritance allows a type to implicitly define the isolation of
-its properties and methods.
-But these are all examples of _declarations_.
-It is also possible to achieve a similar effect with function _values_.
+隔離の*推論*は、型がそのプロパティとメソッドの隔離を暗黙的に定義することを可能にします。しかし、これらはすべて*宣言*の場合です。隔離の*継承*を通しても関数値で同様の効果を得られます。
 
-A closure can capture the isolation at its declaration site, instead of the
-isolation being statically defined by its type.
-This mechanism may sound complex, but in practice it allows very natural
-behaviors.
+クロージャは、型によって隔離が静的に定義される代わりに、その宣言された場所で隔離をキャプチャできます。このメカニズムは複雑に聞こえるかもしれませんが、実際には非常に自然な振る舞いを可能にします。
 
 ```swift
 @MainActor
 func eat(food: Pineapple) {
-    // the static isolation of this function's declaration is
-    // captured by the closure created here
+    // この関数の宣言の静的な隔離は、ここで作成されたクロージャによってキャプチャされる
     Task {
-        // allowing the closure's body to inherit MainActor-isolation
+        // クロージャの本体はMainActorの隔離を継承できる
         Chicken.prizedHen.eat(food: food)
     }
 }
 ```
 
-The closure's type here is defined by `Task.init`.
-Despite that declaration not being isolated to any actor,
-this newly-created task will _inherit_ the `MainActor` isolation of its
-enclosing scope.
+ここでのクロージャの型は`Task.init`によって定義されています。この`Task.init`の宣言はどのアクターにも隔離されていませんが、それを囲むスコープの `MainActor`による隔離を*継承*します。関数型は、隔離の動作を制御するためのさまざまなメカニズムを提供しますが、デフォルトでは他の型と同じように動作します。
 
-It is important to note that this form of isolation inheritance must be done
-explicitly, using the `isolated(any)` annotation.
-Function types offer a number of mechanisms for controlling their
-isolation behavior, but by default, they behave identically to other types.
+> 注記: さらに詳細については、The Swift Programming Languageの[Closures][]セクションを参照してください。
 
-> Note: For more information, see the [Closures][] section of
-The Swift Programming Language.
+## 隔離境界
 
-[Closures]: https://docs.swift.org/swift-book/documentation/the-swift-programming-language/closures
+隔離ドメインは可変状態を保護します。しかし、有用なプログラムはただ保護する以上のものが必要です。多くの場合、隔離ドメイン間でデータの受け渡しによって通信し、協調する必要があります。ある隔離ドメインの中へ値を移動したり、そのドメインから値を移動したりすることは、隔離境界を*越える*と呼ばれます。値が隔離境界を越えることが許されるのは、共有可変状態への同時アクセスの可能性がない場合のみです。
 
-## Isolation Boundaries
+値は、非同期関数の呼び出しを介して、直接境界を越えることあります。*異なる*隔離ドメインで非同期関数を呼び出す場合、パラメータと戻り値はドメイン間を移動することが必要です。また、値がクロージャによってキャプチャされた場合、間接的に境界を越えることもあります。クロージャは隔離境界を越える多くの潜在的な可能性があります。クロージャは、あるドメインで作成され、別のドメインで実行される可能性があります。もっと言うと、複数の異なるドメインで実行されることさえもあり得ます。
 
-Isolation domains protect their mutable state. But, useful programs need more
-than just protection. They have to communicate and coordinate,
-often by passing data back and forth.
-Moving values into or out of an isolation domain is known as crossing an
-isolation boundary.
+### Sendable型
 
-Values are only ever permitted to cross an isolation boundary where there
-is no potential for concurrent access to shared mutable state.
+特定の型のすべての値は、スレッドセーフが型自体の特性であるこtによって、隔離境界を越えて安全に渡せる場合もあります。これは、`Sendable`プロトコルに準拠することで表現できます。`Sendable`に準拠しているということは、その特定の型はスレッドセーフであり、その型の値をデータ競合のリスクなしに任意の隔離ドメイン間で共有できることを意味します。
 
-### Sendable Types
-
-In some cases, all values of a particular type are safe to pass across
-isolation boundaries because thread-safety is a property of the type itself.
-This thread-safe property of types is represented by a conformance to the
-`Sendable` protocol.
-When you see a conformance to `Sendable` in documentation,
-it means the given type is thread safe,
-and values of the type can be shared across arbitrary isolation domains
-without introducing a risk of data races.
-
-Swift encourages using value types because they are naturally safe.
-With value types, different parts of your program can't have
-shared references to the same value.
-When you pass an instance of a value type to a function,
-the function has its own independent copy of that value.
-Because value semantics guarantees the absence of shared mutable state, value
-types in Swift are implicitly `Sendable` when all their stored properties
-are also Sendable.
-However, this implicit conformance is not visible outside of their
-defining module.
-Making a class `Sendable` is part of its public API contract,
-and must always be done explicitly.
+Swiftでは、値型(value type)は本質的に安全であるため、値型を使うことが推奨されています。値型を使用すると、プログラムのさまざまな部分で同じ値への参照を共有できません。値型のインスタンスを関数に渡すと、関数はその値の独立したコピーを保持します。値のセマンティクスによって共有可変状態が存在しないことが保証されるため、Swiftの値型は、格納されているすべてのプロパティも`Sendable`である場合は暗黙的に`Sendable`になります。ただし、この暗黙の準拠は、定義されたモジュールの外部には適用されません。クラスを`Sendable`にすることは、そのパブリックAPIの契約の一部であり、常に明示的に行なう必要があります。
 
 ```swift
 enum Ripeness {
@@ -428,21 +267,54 @@ struct Pineapple {
 }
 ```
 
-Here, both the `Ripeness` and `Pineapple` types are implicitly `Sendable`,
-since they are composed entirely of `Sendable` value types.
+ここで、`Ripeness`と`Pineapple`の両型は、`Sendable`な値型だけで構成されているので、暗黙的に`Sendable`です。
 
-> Note: For more information see the [Sendable Types][] section of
-The Swift Programming Language.
+> 注記: より詳細については、The Swift Programming Languageの[Sendable Types][]セクションを参照してください。
 
 [Sendable Types]: https://docs.swift.org/swift-book/documentation/the-swift-programming-language/concurrency#Sendable-Types
 
-### Actor-Isolated Types
+#### フローセンシティブ(Flow-Sensitive)な隔離の解析
 
-Actors are not value types. But, because they protect all of their state
-in their own isolation domain,
-they are inherently safe to pass across boundaries.
-This makes all actor types implicitly `Sendable`, even if their properties
-are not `Sendable` themselves.
+`Sendable`プロトコルは、型全体がスレッドセーフであることを表現するために使われます。しかし、*`Sendable`ではない型のあるインスタンス*が安全な方法で使われていることもあります。コンパイラは、多くの場合、[リージョンベースの隔離][RBI]として知られるフローセンシティブな解析によってこの安全性を推論できます。
+
+リージョンベースの隔離では、コンパイラがデータ競合を起こさないことがわかる場合、`Sendable`でない型のインスタンスが隔離ドメインを超えることを許可します。
+
+```swift
+func populate(island: Island) async {
+    let chicken = Chicken()
+
+    await island.adopt(chicken)
+}
+```
+
+上記の例で、たとえ`chicken`変数が`Sendable`ではない型を保持していたとしても、コンパイラは、`chicken`を`island`の隔離ドメインに渡しても安全であることを正しく推論できます。しかし、この`Sendable`チェックに違反しているかどうかは、事実上周囲のコードに依存します。コンパイラは、`chicken`変数への安全ではないアクセスが発生した場合にエラーを発生させます。
+
+```swift
+func populate(island: Island) async {
+    let chicken = Chicken()
+
+    await island.adopt(chicken)
+
+    // エラーになる
+    chicken.eat(food: Pineapple())
+}
+```
+
+リージョンベースの隔離は、コードを変更せずに機能します。一方で、この仕組みを使って、関数のパラメータと戻り値が隔離ドメインを超えることを明示できます。
+
+```swift
+func populate(island: Island, with chicken: sending Chicken) async {
+    await island.adopt(chicken)
+}
+```
+
+この`sending`の仕組みにより、コンパイラは、すべての呼び出し先において、安全ではない方法で`chicken`パラメータにアクセスされないを100%保証できます。`sending`は、この仕組みがなければ起こっていた重大な制約を緩和します。もし`sending`がなければ、`Chicken`をまず`Sendable`に準拠させなければ、この関数は実装できませんでした。
+
+[RBI]: https://github.com/swiftlang/swift-evolution/blob/main/proposals/0414-region-based-isolation.md
+
+### アクターに隔離された型
+
+アクターは値型ではありません。しかし、アクターは自身の隔離ドメインですべての状態を保護するため、境界を越えて渡しても実質的に安全です。これにより、アクター内のプロパティ自体が`Sendable`でなくても、すべてのアクターに属する型は暗黙的に`Sendable`になります。
 
 ```swift
 actor Island {
@@ -451,9 +323,7 @@ actor Island {
 }
 ```
 
-Global-actor-isolated types are also implicitly `Sendable` for similar reasons.
-They do not have a private, dedicated isolation domain, but their state is still
-protected by an actor.
+グローバルアクターに隔離された型も、同様の理由で暗黙的に`Sendable`になります。グローバルアクターそれぞれに専用の隔離ドメインはありませんが、その状態はアクターによって保護されています。
 
 ```swift
 @MainActor
@@ -463,17 +333,9 @@ class ChickenValley {
 }
 ```
 
-Being `Sendable`, actor and global-actor-isolated types are always safe
-to pass across isolation boundaries.
+### 参照型
 
-### Reference Types
-
-Unlike value types, reference types cannot be implicitly `Sendable`.
-And while they can be made `Sendable`,
-doing so comes with a number of constraints.
-To make a class `Sendable`, it must contain no mutable state.
-And any immutable properties must also be `Sendable`.
-Further, the compiler can only validate the implementation of final classes.
+値型とは異なり、参照型は暗黙的に`Sendable`にはできません。明示的に`Sendable`にできますが、それにはいくつかの制約が伴います。クラスを`Sendable`にするためには、可変状態が含めてはならず、不変のプロパティも`Sendable`である必要があります。さらに、コンパイラは`final`クラスの実装のみを検証できます。
 
 ```swift
 final class Chicken: Sendable {
@@ -481,55 +343,30 @@ final class Chicken: Sendable {
 }
 ```
 
-It is possible to satisfy the thread-safety requirements of `Sendable`
-using synchronization primitives that the compiler cannot reason about,
-such as through OS-specific constructs or
-when working with thread-safe types implemented in C/C++/Objective-C.
-Such types may be marked as conforming to `@unchecked Sendable` to promise the
-compiler that the type is thread-safe.
-The compiler will not perform any checking on an `@unchecked Sendable` type,
-so this opt-out must be used with caution.
+OS固有の構成要素や、C/C++/Objective-Cで実装されたスレッドセーフな型を使用する場合など、コンパイラが推論できない同期プリミティブを使用して`Sendable`のスレッドセーフ要件を満たすことができます。このような型は、`@unchecked Sendable`に準拠することで、コンパイラにその型がスレッドセーフであることを約束します。コンパイラは`@unchecked Sendable`型に対してチェックを行なわないため、このオプトアウトの使用には注意が必要です。
 
-### Suspension Points
+### 中断ポイント(Suspension Points)
 
-A task can switch between isolation domains when a function in one
-domain calls a function in another.
-A call that crosses an isolation boundary must be made asynchronously,
-because the destination isolation domain might be busy running other tasks.
-In that case, the task will be suspended until the destination isolation
-domain is available.
-Critically, a suspension point does _not_ block.
-The current isolation domain (and the thread it is running on)
-are freed up to perform other work.
-The Swift concurrency runtime expects code to never block on future work,
-allowing the system to always make forward progress.
-This eliminates a common source of deadlocks in concurrent code.
+あるドメインの関数が別のドメインの関数を呼び出すと、タスクは隔離ドメインの間を切り替えることがあります。隔離境界を越える呼び出しは、呼び出し先の隔離ドメインが他のタスクの実行でビジー状態になっている可能性があるため、非同期で行なう必要があります。その場合、タスクは、呼び出し先の隔離ドメインが使用可能になるまで中断されます。重要なのは、中断ポイントがブロックされないということです。現在の隔離ドメイン(およびそれが実行されているスレッド)は、他の作業をするために解放されます。Swiftの並行処理ランタイムは、コードがこの先実行されるタスクをブロックしない、つまりシステムが常に前進するようになっていると想定しています。常に前進することで、並行コードのデッドロックの一般的な原因を取り除いています。
 
 ```swift
 @MainActor
 func stockUp() {
-    // beginning execution on MainActor
+    // MainActorで実行開始
     let food = Pineapple()
 
-    // switching to the island actor's domain
+    // islandアクターのドメインに切り替え
     await island.store(food)
 }
 ```
 
-Potential suspension points are marked in source code with the `await` keyword.
-Its presence indicates that the call might suspend at runtime.
-But, `await` does not force a suspension, and the function being called might
-only suspend under certain dynamic conditions.
-It's possible that a call marked with `await` doesn't actually suspend.
+潜在的な中断ポイントは、ソースコード内で`await`キーワードを付けます。このキーワードが存在すると、呼び出しがランタイム時に中断される可能性があることを示します。ただし、`await`が付いているから中断が必ず発生するのではなく、呼び出される関数は特定の動的条件下でのみ中断される可能性があるということです。`await`が付いた呼び出しは、実際には中断されないこともあります。
 
-### Atomicity
+### 不可分性(Atomicity)
 
-While actors do guarantee safety from data races, they do not ensure
-atomicity across suspension points.
-Because the current isolation domain is freed up to perform other work,
-actor-isolated state may change after an asynchronous call.
-As a consequence, you can think of explicitly marking potential suspension
-points as a way to indicate the end of a critical section.
+アクターはデータ競合からの安全性を保証しますが、中断ポイント間の不可分性(他の処理が割り込まないこと)は保証しません。並行コードは、一連の処理を不可分な単位としてまとめて実行する必要があります。この性質を必要とするコードの単位を*クリティカルセクション(critical section)*と呼びます。
+
+現在の隔離ドメインは、他のタスクを実行するために解放されるため、アクターで隔離されている状態は、非同期呼び出しの後に変更される可能性があります。結果として、潜在的な中断ポイントを明記することは、クリティカルセクションの終了を示す方法だと考えることができます。
 
 ```swift
 func deposit(pineapples: [Pineapple], onto island: Island) async {
@@ -539,12 +376,6 @@ func deposit(pineapples: [Pineapple], onto island: Island) async {
 }
 ```
 
-This code assumes, incorrectly, that the `island` actor's `food` value will not
-change between asynchronous calls.
-Critical sections should always be structured to run synchronously.
+このコードでは、`island`アクターの`food`の値が、非同期呼び出しの間に変化しないと誤って想定しています。クリティカルセクションは、常に同期的に実行されるように構造化されるべきです。
 
-> Note: For more information, see the
-[Defining and Calling Asynchronous Functions][] section of
-The Swift Programming Language.
-
-[Defining and Calling Asynchronous Functions]: https://docs.swift.org/swift-book/documentation/the-swift-programming-language/concurrency/#Defining-and-Calling-Asynchronous-Functions
+> 注記: より詳細については、The Swift Programming Languageの[Defining and Calling Asynchronous Functions][]セクションを参照してください。

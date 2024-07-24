@@ -29,7 +29,7 @@ WWDCのセッションの字幕を参考にしています(セッションによ
 |infer|推論|-|
 |isolation|隔離|-|
 |main actor|メインアクター|-|
-|mutable|非隔離|-|
+|mutable|可変|-|
 |non-isolated|非隔離|-|
 |protocol|プロトコル|-|
 |requirement|要件|-|

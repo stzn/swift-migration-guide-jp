@@ -29,7 +29,7 @@ Swiftパッケージマネージャー（SPM）のコマンドライン呼び出
 ### パッケージマニフェスト
 
 `swift-tools-version: 6.0`を使用する`Package.swift`ファイルは、すべてのターゲットに対してSwift 6言語モードを有効にします。
-引き続き`Package`の`swiftLanguageVersions`プロパティを使用して、パッケージ全体の言語モードを設定ができます。
+引き続き`Package`の`swiftLanguageVersions`プロパティを使用して、パッケージ全体の言語モードを設定できます。
 さらに、新しい`swiftLanguageVersion`ビルド設定を使用して、必要に応じてターゲットごとに言語モードを変更できるようにもなりました。
 
 ```swift

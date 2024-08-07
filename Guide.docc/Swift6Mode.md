@@ -9,7 +9,7 @@ Swift 6言語モードを有効化して、コードにデータ競合が発生�
 
 ## Swiftコンパイラを利用する
 
-コマンドラインで`swift`または`swiftc`を直接実行するときに完全な並行処理チェックを有効にするには、`-swift-version 6`を渡します。
+コマンドラインで`swift`または`swiftc`を直接実行するときに完全な並行処理確認を有効にするには、`-swift-version 6`を渡します。
 
 ```bash
 ~ swift -swift-version 6 main.swift
@@ -19,19 +19,18 @@ Swift 6言語モードを有効化して、コードにデータ競合が発生�
 
 ### コマンドラインからの呼び出し
 
-`-swift-version 6`は、`-Xswiftc`フラグを使用してSwiftパッケージマネージャーのコマンドライン呼び出しで渡すことができます。
+Swiftパッケージマネージャーのコマンドライン呼び出しでは、`-Xswiftc`フラグを使用して`-swift-version 6`を渡すことができます。
 
 ```swift
 ~ swift build -Xswiftc -swift-version -Xswiftc 6
 ~ swift test -Xswiftc -swift-version -Xswiftc 6
 ```
 
-### パッケージマニュフェスト
+### パッケージマニフェスト
 
-`swift-tools-version 6.0`を使用する`Package.swift`ファイルは、すべてのターゲットに対してSwift 6言語モードを有効にします。
-`Package`の`swiftLanguageVersions`プロパティを使用して、パッケージ全体の言語モードを設定ができます。
+`swift-tools-version: 6.0`を使用する`Package.swift`ファイルは、すべてのターゲットに対してSwift 6言語モードを有効にします。
+`Package`の`swiftLanguageVersions`プロパティを使用して、パッケージ全体の言語モードを設定できます。
 ただし、新しい`swiftLanguageVersion`ビルド設定を使用して、必要に応じてターゲットごとに言語モードを変更できるようになりました。
-
 
 ```swift
 // swift-tools-version: 6.0
@@ -61,7 +60,7 @@ let package = Package(
 
 ### ビルド設定
 
-「Swift言語バージョン」ビルド設定を「6」に設定することで、Xcodeプロジェクトまたはターゲットの言語モードを制御できます。
+「Swift Language Version」のビルド設定を「6」に設定することで、Xcodeプロジェクトまたはターゲットの言語モードを制御できます。
 
 ## XCConfig
 

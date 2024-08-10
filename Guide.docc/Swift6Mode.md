@@ -60,7 +60,7 @@ let package = Package(
 
 ### ビルド設定
 
-「Swift Language Version」のビルド設定を「6」に設定することで、Xcodeプロジェクトまたはターゲットの言語モードを制御できます。
+「Swift Language Version」のビルド設定を「Swift 6」に設定することで、Xcodeプロジェクトまたはターゲットの言語モードを制御できます。
 
 ## XCConfig
 

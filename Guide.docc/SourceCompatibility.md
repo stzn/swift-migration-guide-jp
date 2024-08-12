@@ -80,7 +80,7 @@ Swift 6には、ソース互換性に影響を与える可能性のあるいく�
 
 [SE-0384]: https://github.com/swiftlang/swift-evolution/blob/main/proposals/0384-importing-forward-declared-objc-interfaces-and-protocols.md
 
-## プロパティラッパによるアクター隔離推論の削除
+## プロパティラッパーが行なうアクター隔離の推論の削除
 
 [SE-0401][]: `DisableOutwardActorInference`
 
@@ -96,7 +96,7 @@ Swift 6には、ソース互換性に影響を与える可能性のあるいく�
 
 [SE-0411]: https://github.com/swiftlang/swift-evolution/blob/main/proposals/0411-isolated-default-values.md
 
-##  グローバル変数への厳密な並行性
+##  グローバル変数に対する厳密な並行性の確認
 
 [SE-0412][]: `GlobalConcurrency`
 
@@ -112,7 +112,7 @@ Swift 6には、ソース互換性に影響を与える可能性のあるいく�
 
 [SE-0414]: https://github.com/swiftlang/swift-evolution/blob/main/proposals/0414-region-based-isolation.md
 
-## `Sendable`メソッドおよびキーパスリテラルの推論
+## `Sendable`メソッドおよびkey pathリテラルの推論
 
 [SE-0418][]: `InferSendableFromCaptures`
 

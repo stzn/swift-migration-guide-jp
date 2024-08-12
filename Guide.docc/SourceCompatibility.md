@@ -9,11 +9,11 @@
 
 Swift 6には、ソース互換性に影響を与える可能性のあるいくつかのSwift Evolutionのプロポーザルが含まれています。これらはすべて、Swift 5言語モードにおいてはオプトインです。
 
-> 注記: 前回のリリースの移行ガイドについては、[Migrating to Swift 5][swift5]を参照してください。
+> 注記: 前回リリースの移行ガイドについては、[Migrating to Swift 5][swift5]を参照してください。
 
 [swift5]: https://www.swift.org/migration-guide-swift5/
 
-## 将来の列挙型のケースの処理
+## 将来の列挙型ケースの処理
 
 [SE-0192][]: `NonfrozenEnumExhaustivity`
 
@@ -25,7 +25,7 @@ Swift 6には、ソース互換性に影響を与える可能性のあるいく�
 
 [SE-0274][]: `ConciseMagicFile`
 
-特別な式の`#file`がファイル名とモジュール名を含む人間が読める文字列に変更されました。
+特別な式である`#file`が、ファイル名とモジュール名を含む人間が読める文字列に変わりました。
 
 [SE-0274]: https://github.com/swiftlang/swift-evolution/blob/main/proposals/0274-magic-file.md
 
@@ -41,7 +41,7 @@ Swift 6には、ソース互換性に影響を与える可能性のあるいく�
 
 [SE-0337][]: `StrictConcurrency`
 
-データ競合のリスクがあるコードにはエラーになります。
+データ競合のリスクがあるコードはエラーになります。
 
 [SE-0337]: https://github.com/swiftlang/swift-evolution/blob/main/proposals/0337-support-incremental-migration-to-concurrency-checking.md
 
@@ -76,11 +76,11 @@ Swift 6には、ソース互換性に影響を与える可能性のあるいく�
 
 [SE-0384][]: `ImportObjcForwardDeclarations`
 
-既存のソースと競合する可能性のある以前は見えなかった型が露出します。
+既存のソースと競合する可能性のある、以前は見えなかった型が露出します。
 
 [SE-0384]: https://github.com/swiftlang/swift-evolution/blob/main/proposals/0384-importing-forward-declared-objc-interfaces-and-protocols.md
 
-## プロパティラッパによるactor隔離推論の削除
+## プロパティラッパによるアクター隔離推論の削除
 
 [SE-0401][]: `DisableOutwardActorInference`
 
@@ -132,6 +132,6 @@ Swift 6には、ソース互換性に影響を与える可能性のあるいく�
 
 [SE-0434][]: `GlobalActorIsolatedTypesUsability`
 
-グローバルに隔離されていけれども`@Sendable`ではない関数に対する型推論とオーバーロードの解決に影響を与える可能性があります。
+グローバルに隔離されているけれども`@Sendable`ではない関数に対する型推論とオーバーロードの解決に影響を与える可能性があります。
 
 [SE-0434]: https://github.com/swiftlang/swift-evolution/blob/main/proposals/0434-global-actor-isolated-types-usability.md

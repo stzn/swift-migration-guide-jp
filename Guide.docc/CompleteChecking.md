@@ -1,47 +1,40 @@
-# Enabling Complete Concurrency Checking
+# 完全な並行性の確認を有効にする
 
-Incrementally address data-race safety issues by enabling diagnostics as warnings in your project.
+プロジェクト内で診断を警告として有効にして、段階的にデータ競合安全性の問題に対処しよう。
 
-Data-race safety in the Swift 6 language mode is designed for incremental
-migration. You can address data-race safety issues in your projects
-module-by-module, and you can enable the compiler's actor isolation and
-`Sendable` checking as warnings in the Swift 5 language mode, allowing you to
-assess your progress toward eliminating data races before turning on the
-Swift 6 language mode.
+|原文|[https://github.com/apple/swift-migration-guide/blob/main/Guide.docc/CompleteChecking.md](https://github.com/apple/swift-migration-guide/blob/main/Guide.docc/CompleteChecking.md)|
+|---|---|
+|更新日|2024/8/12(翻訳を最後に更新した日付)|
+|ここまで反映|[https://github.com/apple/swift-migration-guide/commit/354d6ee8242b4fde41f9a0cb86ac7fdc1bfb6d30](https://github.com/apple/swift-migration-guide/commit/354d6ee8242b4fde41f9a0cb86ac7fdc1bfb6d30)|
 
-Complete data-race safety checking can be enabled as warnings in the Swift 5
-language mode using the `-strict-concurrency` compiler flag.
+Swift 6言語モードにおけるデータ競合安全性は段階的な移行できるように設計されています。プロジェクトのモジュール単位で、データ競合安全性の問題に対処できます。また、Swift 5言語モードでは、コンパイラのアクター隔離と`Sendable`チェックを警告として有効にできます。さらに、データ競合の排除に対する進捗を評価しながら、Swift 6言語モードを有効にする前に準備を整えることができます。
 
-## Using the Swift compiler
+Swift 5言語モードで`-strict-concurrency`コンパイラフラグを使用することで、完全なデータ競合安全確認を警告として有効にできます。
 
-To enable complete concurrency checking when running `swift` or `swiftc`
-directly at the command line, pass `-strict-concurrency=complete`:
+## Swiftコンパイラを使う
+
+`swift`または`swiftc`を直接コマンドラインで実行する際に、完全な並行性の確認を有効にするには、`-strict-concurrency=complete`を渡します。
 
 ```
 ~ swift -strict-concurrency=complete main.swift
 ```
 
-## Using SwiftPM
+## SwiftPM(SPM)を使う
 
-### In a SwiftPM command-line invocation
+### SwiftPMのコマンドライン呼び出し内
 
-`-strict-concurrency=complete` can be passed in a Swift package manager
-command-line invocation using the `-Xswiftc` flag:
+`-strict-concurrency=complete`をSwiftパッケージマネージャーのコマンドライン呼び出しに渡すには、`-Xswiftc`フラグを使用します。
 
 ```
 ~ swift build -Xswiftc -strict-concurrency=complete
 ~ swift test -Xswiftc -strict-concurrency=complete
 ```
 
-This can be useful to gauge the amount of concurrency warnings before adding
-the flag permanently in the package manifest as described in the following
-section.
+これは、次のセクションで説明するように、フラグをパッケージマニフェストに永続的に追加する前に、並行処理の警告の量を測定するのに役立ちます。
 
-### In a SwiftPM package manifest
+### SwiftPMパッケージマニフェスト内
 
-To enable complete concurrency checking for a target in a Swift package using
-Swift 5.9 or Swift 5.10 tools, use [`SwiftSetting.enableExperimentalFeature`](https://developer.apple.com/documentation/packagedescription/swiftsetting/enableexperimentalfeature(_:_:))
-in the Swift settings for the given target:
+Swift 5.9またはSwift 5.10のツールを使用して完全な並行性の確認を有効にするには、ターゲットのswiftSettingsで、[`SwiftSetting.enableExperimentalFeature`](https://developer.apple.com/documentation/packagedescription/swiftsetting/enableexperimentalfeature(_:_:))を使用します。
 
 ```swift
 .target(
@@ -52,8 +45,7 @@ in the Swift settings for the given target:
 )
 ```
 
-When using Swift 6.0 tools or later, use [`SwiftSetting.enableUpcomingFeature`](https://developer.apple.com/documentation/packagedescription/swiftsetting/enableupcomingfeature(_:_:))
-in the Swift settings for the given target:
+Swift 6.0以降のツールを使用している場合は、Swift 6以前の言語モードのターゲットに対し、swiftSettingsで[`SwiftSetting.enableUpcomingFeature`](https://developer.apple.com/documentation/packagedescription/swiftsetting/enableupcomingfeature(_:_:))使用してください。
 
 ```swift
 .target(
@@ -64,15 +56,12 @@ in the Swift settings for the given target:
 )
 ```
 
-## Using Xcode
+## Xcodeを使う
 
-To enable complete concurrency checking in an Xcode project, set the
-"Strict Concurrency Checking" setting to "Complete" in the Xcode build
-settings. Alternatively, you can set `SWIFT_STRICT_CONCURRENCY` to `complete`
-in an xcconfig file:
+Xcodeプロジェクトで完全な並行性の確認を有効にするには、Xcodeのビルド設定で「Strict Concurrency Checking」の設定を「Complete」にしてください。あるいは、xcconfigファイルで`SWIFT_STRICT_CONCURRENCY`を`complete`にも設定できます。
 
 ```
-// In a Settings.xcconfig
+// Settings.xcconfig内
 
 SWIFT_STRICT_CONCURRENCY = complete;
 ```

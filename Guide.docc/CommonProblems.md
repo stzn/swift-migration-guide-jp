@@ -370,7 +370,6 @@ func updateStyle(backgroundColor: ColorComponents) async {
 ```
 
 `Sendable` への準拠は型の公開APIの取り決めの一部であり、定義するかどうかは自分次第です。
-Because `ColorComponents` is marked `public`, it will not implicitly conform to `Sendable`.
 `ColorComponents` には `public` がついているため、 `Sendable` への暗黙的な準拠を行ないません。
 これは次のようなエラーになります：
 

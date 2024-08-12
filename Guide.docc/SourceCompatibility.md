@@ -1,6 +1,6 @@
 # ソース互換性
 
-潜在的なソースの互換性の問題の概要を確認しよう。
+潜在的なソース互換性問題の概要を確認しよう。
 
 |原文|[https://github.com/apple/swift-migration-guide/blob/main/Guide.docc/SourceCompatibility.md](https://github.com/apple/swift-migration-guide/blob/main/Guide.docc/SourceCompatibility.md)|
 |---|---|

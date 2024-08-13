@@ -87,7 +87,8 @@ var supportedStyleCount: Int {
 }
 ```
 
-もしこの変数を保護するための同期機構があり、それがコンパイラに見えない場合は、`nonisolated(unsafe)` を使って `supportedStyleCount` のすべての隔離確認を無効化できます。
+この変数が、コンパイラの気付かない方法で同期され、保護している場合、`nonisolated(unsafe)` を使って
+`supportedStyleCount` の隔離確認をすべて無効化できます。
 
 ```swift
 /// `styleLock` を保持している間だけこの値にアクセスしてよい。

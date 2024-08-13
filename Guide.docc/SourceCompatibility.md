@@ -1,6 +1,6 @@
 # ソース互換性
 
-潜在的なソース互換性問題の概要を確認しよう。
+潜在的なソース互換性問題の概要を確認しましょう。
 
 |原文|[https://github.com/apple/swift-migration-guide/blob/main/Guide.docc/SourceCompatibility.md](https://github.com/apple/swift-migration-guide/blob/main/Guide.docc/SourceCompatibility.md)|
 |---|---|
@@ -25,7 +25,7 @@ Swift 6には、ソース互換性に影響を与える可能性のあるいく�
 
 [SE-0274][]: `ConciseMagicFile`
 
-特別な式である`#file`が、ファイル名とモジュール名を含む人間が読める文字列に変わりました。
+特別な式である`#file`が、ファイル名とモジュール名を含むヒューマンリーダブルな文字列に変わりました。
 
 [SE-0274]: https://github.com/swiftlang/swift-evolution/blob/main/proposals/0274-magic-file.md
 
@@ -68,7 +68,7 @@ Swift 6には、ソース互換性に影響を与える可能性のあるいく�
 
 [SE-0383][]: `DeprecateApplicationMain`
 
-`@main`を使用するように移行されていないコードはエラーになります。
+まだ `@main` へ移行していないコードに対して、エラーを提示するようになります。
 
 [SE-0383]: https://github.com/swiftlang/swift-evolution/blob/main/proposals/0383-deprecate-uiapplicationmain-and-nsapplicationmain.md
 
@@ -116,7 +116,7 @@ Swift 6には、ソース互換性に影響を与える可能性のあるいく�
 
 [SE-0418][]: `InferSendableFromCaptures`
 
-関数が送信可能性(sendability)によってのみ異なる場合のオーバーロードの解決に影響を与える可能性があります。
+送信可能性(Sendability)のみが異なる関数のオーバーロードの解決に影響を与える可能性があります。
 
 [SE-0418]: https://github.com/swiftlang/swift-evolution/blob/main/proposals/0418-inferring-sendable-for-methods.md
 

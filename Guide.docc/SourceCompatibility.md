@@ -76,7 +76,7 @@ Swift 6には、ソース互換性に影響を与える可能性のあるいく�
 
 [SE-0384][]: `ImportObjcForwardDeclarations`
 
-既存のソースと競合する可能性のある、以前は見えなかった型が露出します。
+以前は見えなかった(Objective-Cの)型が露出し、既存のソースと衝突する可能性があります。
 
 [SE-0384]: https://github.com/swiftlang/swift-evolution/blob/main/proposals/0384-importing-forward-declared-objc-interfaces-and-protocols.md
 

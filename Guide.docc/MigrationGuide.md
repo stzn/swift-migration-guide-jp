@@ -16,7 +16,7 @@
 
 |原文|[https://github.com/apple/swift-migration-guide/blob/main/Guide.docc/MigrationGuide.md](https://github.com/apple/swift-migration-guide/blob/main/Guide.docc/MigrationGuide.md)|
 |---|---|
-|更新日|2024/8/11(翻訳を最後に更新した日付)|
+|更新日|2024/8/15(翻訳を最後に更新した日付)|
 |ここまで反映|[https://github.com/apple/swift-migration-guide/commit/dcbcc0fdbc8138a48f6209c9ce6fed562f34ebe1](https://github.com/apple/swift-migration-guide/commit/dcbcc0fdbc8138a48f6209c9ce6fed562f34ebe1)|
 
 ## 概要
@@ -41,18 +41,31 @@ Swift 6言語モードの導入は、ターゲットごとに完全に制御で�
 
 ### コントリビューション
 
-このガイドは活発に開発を進めています。ソースを眺めたり、完全なコード例を見たり、[リポジトリ][]で貢献する方法について学べます。次のような形での貢献をお待ちしております。
+このガイドは活発に開発を進めています。ソースを眺めたり、完全なコード例を見たり、[リポジトリ][リポジトリ]で貢献する方法について学べます。次のような形での貢献をお待ちしております。
 
-- 特定のコードパターンまたはガイドの追加セクションを網羅する[Issue][]を提出する
+- 特定のコードパターンまたはガイドの追加セクションを網羅する[Issue][Issue]を提出する
 - Pull Requestを開いて既存のコンテンツを改善したり、新しいコンテンツを追加したりする
-- 他のユーザーの[Pull Request][]をレビューして、記述とコード例の明確さと正確さを確認する
+- 他のユーザーの[Pull Request][Pull Request]をレビューして、記述とコード例の明確さと正確さを確認する
 
-詳細については、[コントリビューションガイドライン][]を参照してください。
+詳細については、[コントリビューションガイドライン][コントリビューションガイドライン]を参照してください。
 
 [リポジトリ]: https://github.com/apple/swift-migration-guide
-[Issue]: https://github.com/stzn/swift-migration-guide-jp/issues
-[Pull Request]: https://github.com/stzn/swift-migration-guide-jp/pulls
-[コントリビューションガイドライン]: https://github.com/stzn/swift-migration-guide-jp/blob/main/CONTRIBUTING.md
+[Issue]: https://github.com/apple/swift-migration-guide/issues
+[Pull Request]: https://github.com/apple/swift-migration-guide/pulls
+[コントリビューションガイドライン]: https://github.com/apple/swift-migration-guide/blob/main/CONTRIBUTING.md
+
+
+日本語への貢献は下記のリンクからお願いします。
+
+- [リポジトリ][リポジトリ-jp]
+- [Issue][Issue-jp]
+- [Pull Request][Pull Request-jp]
+- [コントリビューションガイドライン][コントリビューションガイドライン-jp]
+
+[リポジトリ-jp]: https://github.com/stzn/swift-migration-guide-jp/
+[Issue-jp]: https://github.com/stzn/swift-migration-guide-jp/issues
+[Pull Request-jp]: https://github.com/stzn/swift-migration-guide-jp/pulls
+[コントリビューションガイドライン-jp]: https://github.com/stzn/swift-migration-guide-jp/blob/main/CONTRIBUTING.md
 
 ## Topics
 

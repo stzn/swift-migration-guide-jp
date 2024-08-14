@@ -1,13 +1,13 @@
 # 完全な並行性の確認を有効にする
 
-プロジェクト内で診断を警告として有効にし、段階的にデータ競合安全の問題に対処しよう。
+プロジェクト内で診断を警告として有効にして、段階的にデータ競合安全性の問題に対処しましょう。
 
 |原文|[https://github.com/apple/swift-migration-guide/blob/main/Guide.docc/CompleteChecking.md](https://github.com/apple/swift-migration-guide/blob/main/Guide.docc/CompleteChecking.md)|
 |---|---|
 |更新日|2024/8/12(翻訳を最後に更新した日付)|
 |ここまで反映|[https://github.com/apple/swift-migration-guide/commit/354d6ee8242b4fde41f9a0cb86ac7fdc1bfb6d30](https://github.com/apple/swift-migration-guide/commit/354d6ee8242b4fde41f9a0cb86ac7fdc1bfb6d30)|
 
-Swift 6言語モードにおけるデータ競合安全は段階的に移行できるように設計されています。プロジェクトのモジュール単位で、データ競合安全の問題に対処できます。また、Swift 5言語モードでは、コンパイラのアクター隔離と`Sendable`チェックを警告として有効にできます。さらに、データ競合の排除に対する進捗を評価しながら、Swift 6言語モードを有効にする前に準備を整えることができます。
+Swift 6言語モードにおけるデータ競合安全性は段階的な移行できるように設計されています。プロジェクトのモジュール単位で、データ競合安全性の問題に対処できます。また、Swift 5言語モードでは、コンパイラのアクター隔離と`Sendable`確認を警告として有効にできます。さらに、データ競合の排除に対する進捗を評価しながら、Swift 6言語モードを有効にする前に準備を整えることができます。
 
 Swift 5言語モードで`-strict-concurrency`コンパイラフラグを使用することで、完全なデータ競合安全の確認を警告として有効にできます。
 
@@ -60,7 +60,7 @@ Swift 6言語モードを導入するターゲットは、無条件で完全な�
 
 ## Xcodeを使う
 
-Xcodeプロジェクトで完全な並行性の確認を有効にするには、Xcodeのビルド設定で「Strict Concurrency Checking」の設定を「Complete」にしてください。あるいは、xcconfigファイルで`SWIFT_STRICT_CONCURRENCY`を`complete`にも設定できます。
+Xcodeプロジェクトで完全な並行性の確認を有効にするには、Xcodeのビルド設定で「Strict Concurrency Checking」の設定を「Complete」にしてください。あるいは、xcconfigファイルでも`SWIFT_STRICT_CONCURRENCY`を`complete`に設定できます。
 
 ```
 // Settings.xcconfig内

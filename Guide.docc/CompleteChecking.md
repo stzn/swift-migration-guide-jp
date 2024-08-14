@@ -56,6 +56,8 @@ Swift 6.0以降のツールを使用している場合は、Swift 6以前の言�
 )
 ```
 
+Swift 6言語モードを導入するターゲットは、無条件で完全な並行性の確認が有効になっており、設定を変更する必要はありません。
+
 ## Xcodeを使う
 
 Xcodeプロジェクトで完全な並行性の確認を有効にするには、Xcodeのビルド設定で「Strict Concurrency Checking」の設定を「Complete」にしてください。あるいは、xcconfigファイルで`SWIFT_STRICT_CONCURRENCY`を`complete`にも設定できます。

@@ -55,7 +55,7 @@ Swift 6言語モードの導入は、ターゲットごとに完全に制御で�
 [コントリビューションガイドライン]: https://github.com/apple/swift-migration-guide/blob/main/CONTRIBUTING.md
 
 
-日本語への貢献は下記のリンクからお願いします。
+日本語版への貢献は下記のリンクからお願いします。
 
 - [リポジトリ][リポジトリ-jp]
 - [Issue][Issue-jp]

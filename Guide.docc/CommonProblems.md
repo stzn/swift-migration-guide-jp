@@ -664,7 +664,7 @@ class WindowStyler {
 すべての `Sendable` なプロパティはこの `init` メソッドのなかで依然として安全にアクセスできます。
 また、 非 `Sendable` なプロパティは初期化できないもののデフォルト式を使えば初期化できます。
 
-### 非隔離のデイニシャライゼーション
+### デイニシャライゼーションの非隔離
 
 アクター隔離を持つ型であっても、デイニシャライザは _常に_ 非隔離です。
 
@@ -674,7 +674,7 @@ actor BackgroundStyler {
     private let store = StyleStore()
 
     deinit {
-        // ここは非隔離
+        // これは非隔離
         store.stopNotifications()
     }
 }
@@ -692,7 +692,7 @@ error: call to actor-isolated instance method 'stopNotifications()' in a synchro
  9 | }
 ```
 
-この型がアクターであるため意外に感じるかもしれませんが、ここは新しい制約になっていません。
+この型がアクターであるため意外に感じられるかもしれませんが、これは新しい制約になっていません。
 デイニシャライザを実行するスレッドが過去に保証されたことはなく、Swiftのデータ隔離が今その事実を表面化させただけです。
 
 多くの場合、 `deinit` 内で行なわれる作業が同期的である必要はありません。
@@ -705,7 +705,7 @@ actor BackgroundStyler {
     private let store = StyleStore()
 
     deinit {
-        // ここはアクター隔離されていないのでタスクが引き継ぐものはない
+        // ここにアクター隔離はないので、タスクに引き継がれる隔離もない
         Task { [store] in
             await store.stopNotifications()
         }

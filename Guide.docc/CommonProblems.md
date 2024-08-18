@@ -87,7 +87,7 @@ var supportedStyleCount: Int {
 }
 ```
 
-もしこの変数を保護するための同期機構があり、それがコンパイラに見えない場合は、`nonisolated(unsafe)` を使って `supportedStyleCount` のすべての隔離確認を無効化できます。
+もし、この変数を保護するための同期が、コンパイラからは見えない形で行われている場合、`nonisolated(unsafe)` を使って `supportedStyleCount` の隔離確認をすべて無効化できます。
 
 ```swift
 /// `styleLock` を保持している間だけこの値にアクセスしてよい。
@@ -370,7 +370,6 @@ func updateStyle(backgroundColor: ColorComponents) async {
 ```
 
 `Sendable` への準拠は型の公開APIの取り決めの一部であり、定義するかどうかは自分次第です。
-Because `ColorComponents` is marked `public`, it will not implicitly conform to `Sendable`.
 `ColorComponents` には `public` がついているため、 `Sendable` への暗黙的な準拠を行ないません。
 これは次のようなエラーになります：
 
@@ -665,7 +664,7 @@ class WindowStyler {
 すべての `Sendable` なプロパティはこの `init` メソッドのなかで依然として安全にアクセスできます。
 また、 非 `Sendable` なプロパティは初期化できないもののデフォルト式を使えば初期化できます。
 
-### 非隔離のデイニシャライゼーション
+### デイニシャライゼーションは非隔離
 
 アクター隔離を持つ型であっても、デイニシャライザは _常に_ 非隔離です。
 
@@ -675,7 +674,7 @@ actor BackgroundStyler {
     private let store = StyleStore()
 
     deinit {
-        // ここは非隔離
+        // これは非隔離
         store.stopNotifications()
     }
 }
@@ -693,7 +692,7 @@ error: call to actor-isolated instance method 'stopNotifications()' in a synchro
  9 | }
 ```
 
-この型がアクターであるために意外に感じるかもしれませんが、これは新しい制約ではありません。
+この型がアクターであるため意外に感じられるかもしれませんが、これは新しい制約になっていません。
 デイニシャライザを実行するスレッドが過去に保証されたことはなく、Swiftのデータ隔離が今その事実を表面化させただけです。
 
 多くの場合、 `deinit` 内で行なわれる作業が同期的である必要はありません。
@@ -706,7 +705,7 @@ actor BackgroundStyler {
     private let store = StyleStore()
 
     deinit {
-        // ここはアクター隔離されていないのでタスクが引き継ぐものはない
+        // ここにアクター隔離はないので、タスクに引き継がれる隔離コンテキストもない
         Task { [store] in
             await store.stopNotifications()
         }

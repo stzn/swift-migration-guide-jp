@@ -26,6 +26,7 @@
     "lint-staged": "^15.2.5",
     "textlint": "^14.0.4",
     "textlint-rule-preset-smarthr": "^1.30.0",
-    "textlint-rule-prh": "^6.0.0"
+    "textlint-rule-prh": "^6.0.0",
+    "textlint-filter-rule-comments": "^1.2.2"
   }
 }

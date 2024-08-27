@@ -38,3 +38,8 @@ DocCを実行した後、`docc` が出力するリンクを開いて、ブラウ
 [contributing]: https://github.com/stzn/swift-migration-guide-jp/blob/main/CONTRIBUTING.md
 [docc]: https://github.com/apple/swift-docc
 [conduct]: https://www.swift.org/code-of-conduct
+
+## コントリビューター
+
+<!-- readme: contributors -start -->
+<!-- readme: contributors -end -->

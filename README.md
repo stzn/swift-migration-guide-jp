@@ -42,4 +42,52 @@ DocCを実行した後、`docc` が出力するリンクを開いて、ブラウ
 ## コントリビューター
 
 <!-- readme: contributors -start -->
+<table>
+	<tbody>
+		<tr>
+            <td align="center">
+                <a href="https://github.com/stzn">
+                    <img src="https://avatars.githubusercontent.com/u/35151927?v=4" width="100;" alt="stzn"/>
+                    <br />
+                    <sub><b>shiz</b></sub>
+                </a>
+            </td>
+            <td align="center">
+                <a href="https://github.com/S-Shimotori">
+                    <img src="https://avatars.githubusercontent.com/u/10096099?v=4" width="100;" alt="S-Shimotori"/>
+                    <br />
+                    <sub><b>SHIMOTORI Shigure</b></sub>
+                </a>
+            </td>
+            <td align="center">
+                <a href="https://github.com/SatoTakeshiX">
+                    <img src="https://avatars.githubusercontent.com/u/4253490?v=4" width="100;" alt="SatoTakeshiX"/>
+                    <br />
+                    <sub><b>佐藤剛士</b></sub>
+                </a>
+            </td>
+            <td align="center">
+                <a href="https://github.com/narumij">
+                    <img src="https://avatars.githubusercontent.com/u/153823?v=4" width="100;" alt="narumij"/>
+                    <br />
+                    <sub><b>narumij</b></sub>
+                </a>
+            </td>
+            <td align="center">
+                <a href="https://github.com/giginet">
+                    <img src="https://avatars.githubusercontent.com/u/147051?v=4" width="100;" alt="giginet"/>
+                    <br />
+                    <sub><b>Kohki Miki</b></sub>
+                </a>
+            </td>
+            <td align="center">
+                <a href="https://github.com/laprasdrum">
+                    <img src="https://avatars.githubusercontent.com/u/528196?v=4" width="100;" alt="laprasdrum"/>
+                    <br />
+                    <sub><b>laprasdrum</b></sub>
+                </a>
+            </td>
+		</tr>
+	<tbody>
+</table>
 <!-- readme: contributors -end -->

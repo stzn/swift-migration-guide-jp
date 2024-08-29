@@ -88,6 +88,15 @@ DocCを実行した後、`docc` が出力するリンクを開いて、ブラウ
                 </a>
             </td>
 		</tr>
+		<tr>
+            <td align="center">
+                <a href="https://github.com/shin-usu">
+                    <img src="https://avatars.githubusercontent.com/u/59346949?v=4" width="100;" alt="shin-usu"/>
+                    <br />
+                    <sub><b>Usuda Shin</b></sub>
+                </a>
+            </td>
+		</tr>
 	<tbody>
 </table>
 <!-- readme: contributors -end -->

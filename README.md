@@ -60,17 +60,17 @@ DocCを実行した後、`docc` が出力するリンクを開いて、ブラウ
                 </a>
             </td>
             <td align="center">
-                <a href="https://github.com/SatoTakeshiX">
-                    <img src="https://avatars.githubusercontent.com/u/4253490?v=4" width="100;" alt="SatoTakeshiX"/>
-                    <br />
-                    <sub><b>佐藤剛士</b></sub>
-                </a>
-            </td>
-            <td align="center">
                 <a href="https://github.com/narumij">
                     <img src="https://avatars.githubusercontent.com/u/153823?v=4" width="100;" alt="narumij"/>
                     <br />
                     <sub><b>narumij</b></sub>
+                </a>
+            </td>
+            <td align="center">
+                <a href="https://github.com/SatoTakeshiX">
+                    <img src="https://avatars.githubusercontent.com/u/4253490?v=4" width="100;" alt="SatoTakeshiX"/>
+                    <br />
+                    <sub><b>佐藤剛士</b></sub>
                 </a>
             </td>
             <td align="center">

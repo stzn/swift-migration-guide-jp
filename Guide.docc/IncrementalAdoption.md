@@ -415,3 +415,85 @@ final class MyJetPack: NSJetPack {
 ```
 
 こうすることで、Swiftは、メソッドがメインアクターの隔離を必要とするという誤った仮定を確認しないようになります。
+
+## Dispatch
+
+Dispatchや他の並行処理ライブラリで使い慣れているだろう一部のパターンは、Swiftの構造化並行処理モデルの世界に適合させるために、形を変える必要があるかもしれません。
+
+### タスクグループを用いた並行処理の制限
+
+処理するべき大量の作業リストを抱えていることもあるかもしれません。
+
+次のように"すべて"の作業項目をタスクグループに追加することは、可能といえば可能です：
+
+```swift
+// WARNING: 無駄が多い処理かも -- おそらく、このコードは数千のタスクを同時並行的に作成する（？！）
+
+let lotsOfWork: [Work] = ...
+await withTaskGroup(of: Something.self) { group in
+  for work in lotsOfWork {
+    // WARNING: もしもこれが数千もの項目なら、
+    //  同時に実行するタスクの数（システムのコア数に依存）とデフォルトのグローバルエグゼキュータの設定にグローバルな制限があるため、
+    //  かなり後になってからでないと実行されないタスクが多数作成される可能性がある。
+    group.addTask {
+      await work.work()
+    }
+  }
+
+  for await result in group {
+    process(result) // 必要に応じて、結果を何らかの方法で処理する
+  }
+}
+```
+
+何百または何千もの項目を扱うつもりなら、それらをすべて一気にタスクグループに追加するのは非効率的かもしれません。
+メモリ量はさほど大きくない一方で、タスクを（`addTask` で）作成するにはタスクに中断と実行のためのメモリをいくらか割り当てる必要があります。
+ただちに実行されずエグゼキュータが実行するまで待機するだけのタスクを何千個も作成した場合に大きな影響を及ぼす可能性があります。
+
+このような状況に直面した場合、次のように、タスクグループに同時に追加されるタスクの数を手動で調整するとよい場合があります：
+
+```swift
+let lotsOfWork: [Work] = ... 
+let maxConcurrentWorkTasks = min(lotsOfWork.count, 10)
+assert(maxConcurrentWorkTasks > 0)
+
+await withTaskGroup(of: Something.self) { group in
+    var submittedWork = 0
+    for _ in 0..<maxConcurrentWorkTasks {
+        group.addTask { // または 'addTaskUnlessCancelled'
+            await lotsOfWork[submittedWork].work() 
+        }
+        submittedWork += 1
+    }
+    
+    for await result in group {
+        process(result) // 必要に応じて、結果を何らかの方法で処理する
+    
+        // 結果が返ってくる度に、実行すべき追加の作業があるかどうかを確認する
+        if submittedWork < lotsOfWork.count, 
+           let remainingWorkItem = lotsOfWork[submittedWork] {
+            group.addTask { // または 'addTaskUnlessCancelled'
+                await remainingWorkItem.work() 
+            }  
+            submittedWork += 1
+        }
+    }
+}
+```
+
+「作業」タスクが長時間実行される同期コードを含んでいるなら、そのタスクを自ら中断し他のタスクが実行できるようにするほうが合理的なこともあります：
+
+```swift
+struct Work {
+  let dependency: Dependency
+  func work() async {
+    await dependency.fetch()
+    // 長時間実行される同期コードの一部を実行する
+    await Task.yield()  // 明示的に中断ポイントを入れる
+    // 長時間実行される同期実行を続ける
+  }
+}
+```
+
+明示的な中断ポイントの導入は、Swiftがこのタスクの進捗とプログラム内の他のタスクの作業の進捗のバランスをとるのに役立ちます。
+しかし、システムのなかでこのタスクが最も優先順位が高い場合、エグゼキュータはただちに同じタスクの実行を再開します。そのため、明示的な中断ポイントで必ずしも資源飢餓を避けられるわけではありません。

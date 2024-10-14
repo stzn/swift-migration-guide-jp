@@ -90,6 +90,13 @@ DocCを実行した後、`docc` が出力するリンクを開いて、ブラウ
 		</tr>
 		<tr>
             <td align="center">
+                <a href="https://github.com/tikidunpon">
+                    <img src="https://avatars.githubusercontent.com/u/1140982?v=4" width="100;" alt="tikidunpon"/>
+                    <br />
+                    <sub><b>tanako</b></sub>
+                </a>
+            </td>
+            <td align="center">
                 <a href="https://github.com/shin-usu">
                     <img src="https://avatars.githubusercontent.com/u/59346949?v=4" width="100;" alt="shin-usu"/>
                     <br />

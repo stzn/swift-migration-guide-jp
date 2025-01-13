@@ -13,6 +13,8 @@ npm install
 1. [Issues](https://github.com/stzn/swift-migration-guide-jp/issues)の中から解決したいIssueを選択(あるいは作成)してください
 2. 選択したIssueのAssigneesに自身を設定してください 
 
+※ 誤字脱字などの微細な修正のみであれば不要です。その場合は直接PRを作成してください。
+
 ### PRを開く
 
 1. まずこのリポジトリをforkしてください

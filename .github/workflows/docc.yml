@@ -10,7 +10,7 @@ jobs:
   BuildDocCArchive:
     runs-on: macos-15
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Build DocC Archive
         run: |
           ./deploy-docc-page.sh

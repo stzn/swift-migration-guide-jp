@@ -87,7 +87,7 @@ var supportedStyleCount: Int {
 }
 ```
 
-もし、この変数を保護するための同期が、コンパイラからは見えない形で行われている場合、`nonisolated(unsafe)` を使って `supportedStyleCount` の隔離確認をすべて無効化できます。
+もし、この変数を保護するための同期が、コンパイラからは見えない形で行なわれている場合、`nonisolated(unsafe)` を使って `supportedStyleCount` の隔離確認をすべて無効化できます。
 
 ```swift
 /// `styleLock` を保持している間だけこの値にアクセスしてよい。
@@ -264,7 +264,9 @@ class WindowStyler: Styler {
 Swiftには、並行処理を段階的に導入し、まだ並行処理を全く使用していないコードと相互運用するための多くのメカニズムがあります。
 これらのツールは、自分が所有していないコードはもちろん、所有しているが簡単に変更できないコードに対しても役立ちます。
 
-プロトコルの準拠に `@preconcurrency` のアノテーションをつけると、隔離不一致に関するエラーを抑制できます。
+プロトコルの準拠に[`@preconcurrency`][Preconcurrency]のアノテーションをつけると、隔離不一致に関するエラーを抑制できます。
+
+[Preconcurrency]: libraryevolution#preconcurrencyアノテーション
 
 ```swift
 @MainActor

@@ -76,6 +76,7 @@ Swift 6言語モードの導入は、ターゲットごとに完全に制御で�
 - <doc:CommonProblems>
 - <doc:IncrementalAdoption>
 - <doc:SourceCompatibility>
+- <doc:LibraryEvolution>
 
 ### Swift Concurrencyの詳細
 

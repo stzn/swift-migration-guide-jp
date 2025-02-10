@@ -28,7 +28,7 @@ public func performConcurrently(
 
 ABI互換性のために、`@preconcurrency`をつけると並行性のアノテーションがない状態でシンボル名をマングリングします。しかし、あるAPIをいくつかの並行性のアノテーションをつけて導入し、あとで追加の並行性のアノテーションを含むように更新した場合は、`@preconcurrency`をつけるだけだと、マングル化された名前を維持できません。並行性のアノテーションのマングリングをより正確に制御する必要がある場合は、`@_silgen_name`を使用できます。
 
-C、C++、およびObjective-CからインポートされたすべてのAPIは、自動的に`@preconcurrency`がついていると見なされることに注意してください。並行性の属性は、ソースまたはABI互換性を損なうことなく、`__attribute__((__swift_attr__("<attribute name>")))`を使用してこれらのAPIに常に適用できます。
+C、C++、およびObjective-CからインポートされたすべてのAPIは、自動的に`@preconcurrency`がついていると見なされることに注意してください。`__attribute__((__swift_attr__("<attribute name>")))`を使用することで、ソースまたはABI互換性を損なうことなく、いつでも並行性の属性をそれらのAPIへ適用できます。
 
 ## Sendable
 

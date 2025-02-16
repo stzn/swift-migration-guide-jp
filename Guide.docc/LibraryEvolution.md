@@ -154,6 +154,15 @@ public func performConcurrently(completion: @escaping @MainActor () -> Void) { .
 +public func getValue() -> sending NotSendable
 ```
 
+しかし、パラメータに`sending`を追加すると、呼び出し側でより制限が厳しくなります。
+
+**ソース互換性とABI互換性のない変更**:
+
+```diff
+-public func takeValue(_: NotSendable)
++public func takeValue(_: sending NotSendable)
+```
+
 今のところ、ソース互換性を損なわずにパラメータに新しく`sending`を導入する方法はありません。
 
 ### `@Sendable`を`sending`に置き換える
